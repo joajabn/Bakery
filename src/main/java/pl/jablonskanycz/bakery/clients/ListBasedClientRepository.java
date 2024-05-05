@@ -1,10 +1,13 @@
-package pl.jablonskanycz.bakery;
+package pl.jablonskanycz.bakery.clients;
+
+import pl.jablonskanycz.bakery.clients.Client;
+import pl.jablonskanycz.bakery.clients.ClientRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class ListBasedClientRepository implements ClientRepository{
+public class ListBasedClientRepository implements ClientRepository {
     private List<Client> clients = new ArrayList<>();
     @Override
     public List<Client> getAll() {
@@ -22,6 +25,11 @@ public class ListBasedClientRepository implements ClientRepository{
     @Override
     public void addClient(Client clientToAdd) {
         clients.add(clientToAdd);
+    }
+
+    @Override
+    public void updateClient(Client clientToUpdate) {
+
     }
 
     @Override

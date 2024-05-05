@@ -1,4 +1,4 @@
-package pl.jablonskanycz.bakery;
+package pl.jablonskanycz.bakery.clients;
 
 import lombok.Getter;
 

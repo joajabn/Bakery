@@ -1,5 +1,7 @@
 package pl.jablonskanycz.bakery;
 
+import pl.jablonskanycz.bakery.clients.Client;
+
 import java.util.List;
 
 public class Bakery {
