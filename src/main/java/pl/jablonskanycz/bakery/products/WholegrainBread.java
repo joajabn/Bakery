@@ -7,6 +7,7 @@ public class WholegrainBread extends Bread{
     public WholegrainBread(String grain, Bread bread) {
         super(bread.getName(), bread.getPrice());
         this.grain = grain;
+        this.bread = bread;
     }
 
     @Override

@@ -7,6 +7,7 @@ public class SeedToppingBread extends Bread {
     public SeedToppingBread(String seedTopping, Bread bread) {
         super(bread.getName(), bread.getPrice());
         this.seedTopping = seedTopping;
+        this.bread = bread;
     }
 
     @Override

@@ -3,7 +3,7 @@ package pl.jablonskanycz.bakery.products;
 import lombok.Getter;
 
 @Getter
-public class Product {
+public abstract class Product {
     private String name;
     private double price;
 

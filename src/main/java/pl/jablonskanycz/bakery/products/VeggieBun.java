@@ -7,6 +7,7 @@ public class VeggieBun extends Bun {
     public VeggieBun(String vegetable, Bun bun) {
         super(bun.getName(), bun.getPrice());
         this.vegetable = vegetable;
+        this.bun = bun;
     }
 
     @Override

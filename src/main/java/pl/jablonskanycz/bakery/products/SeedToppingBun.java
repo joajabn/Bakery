@@ -7,6 +7,7 @@ public class SeedToppingBun extends Bun {
     public SeedToppingBun(String topping, Bun bun) {
         super(bun.getName(), bun.getPrice());
         this.seedTopping = topping;
+        this.bun = bun;
     }
 
     @Override

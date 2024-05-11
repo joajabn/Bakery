@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 @ToString
-public class Client {
-    private String name;
-    private String surname;
-    private Address address;
+public class Address {
+    private double latitude;
+    private double longitude;
 
 }
