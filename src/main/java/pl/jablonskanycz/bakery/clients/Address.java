@@ -8,6 +8,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Address {
+    private int id;
     private double latitude;
     private double longitude;
 

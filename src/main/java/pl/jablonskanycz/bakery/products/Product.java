@@ -12,8 +12,4 @@ public abstract class Product {
         this.price = price;
     }
 
-    public void baking(){
-        System.out.println("Baking!");
-        System.out.println(name + " is ready!");
-    }
 }
