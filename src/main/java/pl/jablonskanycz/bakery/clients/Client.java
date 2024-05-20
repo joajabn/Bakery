@@ -12,6 +12,6 @@ public class Client {
     private int id;
     private String name;
     private String surname;
-    private int address_id;
+    private Address address;
 
 }

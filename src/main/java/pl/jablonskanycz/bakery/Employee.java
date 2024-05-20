@@ -1,10 +1,11 @@
 package pl.jablonskanycz.bakery;
 
 
+import lombok.Getter;
 import lombok.ToString;
 
 import java.time.Instant;
-
+@Getter
 @ToString
 public class Employee {
     private int id;
