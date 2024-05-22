@@ -6,7 +6,7 @@ public class VeggieBunFactory implements BunFactory {
 
 
     @Override
-    public Bun bakeBun(String name, double price, ProductType productType) {
+    public Bun bake(String name, double price, ProductType productType) {
         return new Bun(name, price, productType);
     }
 }
