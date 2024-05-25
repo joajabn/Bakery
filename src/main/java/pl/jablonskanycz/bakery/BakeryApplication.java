@@ -2,15 +2,10 @@ package pl.jablonskanycz.bakery;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import pl.jablonskanycz.bakery.clients.Address;
-import pl.jablonskanycz.bakery.clients.Client;
-import pl.jablonskanycz.bakery.clients.ListBasedAddressRepository;
-import pl.jablonskanycz.bakery.clients.ListBasedClientRepository;
-import pl.jablonskanycz.bakery.products.ListBasedProductRepository;
-import pl.jablonskanycz.bakery.products.Product;
-import pl.jablonskanycz.bakery.products.ProductType;
-import pl.jablonskanycz.bakery.products.bread.*;
+import pl.jablonskanycz.bakery.clients.*;
+import pl.jablonskanycz.bakery.products.*;
 import pl.jablonskanycz.bakery.products.bun.*;
+import pl.jablonskanycz.bakery.products.bread.*;
 
 
 import java.io.IOException;
@@ -28,10 +23,10 @@ public class BakeryApplication {
 //        SpringApplication.run(BakeryApplication.class, args);
 
 //Data import
-        ListBasedAddressRepository addressRepository = new ListBasedAddressRepository();
-        ListBasedClientRepository clientRepository = new ListBasedClientRepository();
-        ListBasedProductRepository productRepository = new ListBasedProductRepository();
-        ListBasedEmployeeRepository employeeRepository = new ListBasedEmployeeRepository();
+        AddressRepository addressRepository = new ListBasedAddressRepository();
+        ClientRepository clientRepository = new ListBasedClientRepository();
+        ProductRepository productRepository = new ListBasedProductRepository();
+        EmployeeRepository employeeRepository = new ListBasedEmployeeRepository();
 
         Path addressPath = Path.of("src", "main", "resources", "ADDRESS.csv");
         Path clientPath = Path.of("src", "main", "resources", "CLIENT.csv");
