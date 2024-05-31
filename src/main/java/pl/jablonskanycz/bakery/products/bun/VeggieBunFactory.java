@@ -1,12 +1,13 @@
 package pl.jablonskanycz.bakery.products.bun;
 
+import pl.jablonskanycz.bakery.products.ProductFactory;
 import pl.jablonskanycz.bakery.products.ProductType;
 
-public class VeggieBunFactory implements BunFactory {
+public class VeggieBunFactory implements ProductFactory {
 
 
     @Override
-    public Bun bakeBun(String name, double price, ProductType productType) {
+    public Bun bake(String name, double price, ProductType productType) {
         return new Bun(name, price, productType);
     }
 }
