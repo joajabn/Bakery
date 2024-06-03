@@ -42,27 +42,26 @@ public class BakeryApplication {
         ProductRepository productRepository = new FiledBasedProductRepository();
         EmployeeRepository employeeRepository = new FileBasedEmployeeRepository();
 
-        Path addressPath = Path.of("src", "main", "resources", "ADDRESS.csv");
-        Path clientPath = Path.of("src", "main", "resources", "CLIENT.csv");
         Path employeePath = Path.of("src", "main", "resources", "EMPLOYEE.csv");
         Path productPath = Path.of("src", "main", "resources", "PRODUCT.csv");
 
         List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
+//
+//
+//        for (Address address : addresses) {
+//            System.out.println(address);; // a to wkłada do LISTY
+//        }
 
+//        addressRepository.addAddress(Address.builder().latitude(16.89).longitude(21.43).build());
+//        System.out.println(addressRepository.findById(2));
 
-        for (Address address : addresses) {
-            System.out.println(address);; // a to wkłada do LISTY
+        List<Client> clients = clientRepository.getAll();
+
+        for (Client client : clients) {
+            System.out.println(client);
         }
 
-        addressRepository.addAddress(Address.builder().latitude(16.89).longitude(21.43).build());
-
-
-//        List<Client> clients = readClientsFrom(clientPath, addressRepository); // pytanie
-//        // (adresRepo)
-//
-//        for (Client client : clients) {
-//            clientRepository.addClient(client);
-//        }
+        System.out.println(clientRepository.getAll());
 //
 //        List<Employee> employees = readEmployessFrom(employeePath);
 //
