@@ -25,7 +25,7 @@ public class ListBasedEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public void updateEmployee(Employee employeeToUpdate) {
+    public void updateEmployee(Employee employeeWithOldData, Employee employeeWithNewData) {
 
     }
 

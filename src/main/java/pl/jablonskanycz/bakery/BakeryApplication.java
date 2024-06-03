@@ -42,8 +42,6 @@ public class BakeryApplication {
         ProductRepository productRepository = new FiledBasedProductRepository();
         EmployeeRepository employeeRepository = new FileBasedEmployeeRepository();
 
-        Path employeePath = Path.of("src", "main", "resources", "EMPLOYEE.csv");
-        Path productPath = Path.of("src", "main", "resources", "PRODUCT.csv");
 
         List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
 //
