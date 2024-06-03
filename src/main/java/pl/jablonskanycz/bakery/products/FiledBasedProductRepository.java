@@ -3,9 +3,7 @@ package pl.jablonskanycz.bakery.products;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import pl.jablonskanycz.bakery.products.bread.PlainGrainBreadFactory;
@@ -15,6 +13,7 @@ import pl.jablonskanycz.bakery.products.bun.FruitBunFactory;
 import pl.jablonskanycz.bakery.products.bun.SeedToppingBunFactory;
 import pl.jablonskanycz.bakery.products.bun.VeggieBunFactory;
 
+import static java.nio.file.StandardOpenOption.APPEND;
 import static pl.jablonskanycz.bakery.products.ProductType.*;
 
 public class FiledBasedProductRepository implements ProductRepository {
@@ -55,22 +54,87 @@ public class FiledBasedProductRepository implements ProductRepository {
 
     @Override
     public Product findByName(String name) {
-        return null;
+        Product product = null;
+        try {
+            return Files.lines(productPath)
+                    .skip(1)
+                    .map(line -> {
+                        String[] strings = line.split(",");
+                        return createProductFromProductType(
+                                strings[0],
+                                Integer.parseInt(strings[1]),
+                                ProductType.valueOf(strings[2])
+                        );
+                    })
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("There's no such product in our bakery"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return product;
+
     }
 
     @Override
     public List<Product> findByType(ProductType productType) {
-        return null;
+        List<Product> products = null;
+        try {
+            return Files.lines(productPath)
+                    .skip(1)
+                    .map(line -> {
+                        String[] strings = line.split(",");
+                        return createProductFromProductType(
+                                strings[0],
+                                Integer.parseInt(strings[1]),
+                                ProductType.valueOf(strings[2])
+                        );
+                    })
+                    .filter(p -> p.getProductType().equals(productType))
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return products;
     }
 
     @Override
     public void addProduct(Product productToAdd) {
+        List<String> productsList = null;
+        try {
+            productsList = Files.lines(productPath)
+                    .toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String line = "\n" + productToAdd.getName() + "," + productToAdd.getPrice() + "," + productToAdd.getProductType();
+        try {
+            Files.writeString(productPath, line, APPEND);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
-    public void deleteProduct(Product productToRemove) {
+    public void deleteProduct(Product productToRemove) { //do dokończenia, gdy rozpracuje usuwanie linii w pliku
+        try {
+            Optional<Product> client = Files.lines(productPath)
+                    .skip(1)
+                    .map(line -> {
+                        String[] strings = line.split(",");
+                        return createProductFromProductType(
+                                strings[0],
+                                Integer.parseInt(strings[1]),
+                                ProductType.valueOf(strings[2])
+                        );
+                    })
+                    .filter(p -> p.equals(productToRemove))
+                    .findFirst();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Product createProductFromProductType(String name, double price, ProductType productType) {
