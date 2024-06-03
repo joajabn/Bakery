@@ -4,7 +4,7 @@ import java.time.Instant;
 
 public class Owner extends Employee {
 
-    public Owner(String name, String surname, Instant jobStartingDate) {
-        super(name, surname, jobStartingDate);
+    public Owner(int id, String name, String surname, String jobStartingDate) {
+        super(id, name, surname, jobStartingDate);
     }
 }

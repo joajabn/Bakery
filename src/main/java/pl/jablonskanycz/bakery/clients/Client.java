@@ -9,6 +9,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Client {
+    private int id;
     private String name;
     private String surname;
     private Address address;

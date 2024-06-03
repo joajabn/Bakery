@@ -1,17 +1,20 @@
 package pl.jablonskanycz.bakery;
 
 
+import lombok.Getter;
 import lombok.ToString;
 
 import java.time.Instant;
-
+@Getter
 @ToString
 public class Employee {
+    private int id;
     private String name;
     private String surname;
-    private Instant jobStartingDate;
+    private String jobStartingDate;
 
-    public Employee(String name, String surname, Instant jobStartingDate) {
+    public Employee(int id, String name, String surname, String jobStartingDate) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.jobStartingDate = jobStartingDate;

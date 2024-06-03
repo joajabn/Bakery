@@ -3,6 +3,7 @@ package pl.jablonskanycz.bakery.products;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class ListBasedProductRepository implements ProductRepository {
     private List<Product> products = new ArrayList<>();
@@ -18,6 +19,13 @@ public class ListBasedProductRepository implements ProductRepository {
                 .filter(product -> name.equals(product.getName()))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No such product"));
+    }
+
+    @Override
+    public List<Product> findByType(ProductType type) {
+        return products.stream()
+                .filter(product -> type.equals(product.getProductType()))
+                .collect(Collectors.toList());
     }
 
     @Override

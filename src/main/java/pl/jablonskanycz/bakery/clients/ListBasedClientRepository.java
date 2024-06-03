@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ListBasedClientRepository implements ClientRepository {
-    private List<Client> clients = new ArrayList<>();
+    private final List<Client> clients = new ArrayList<>();
     @Override
     public List<Client> getAll() {
         return clients;

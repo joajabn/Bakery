@@ -1,0 +1,19 @@
+﻿NAME;PRICE;PRODUCT_TYPE
+Asparagus bun;13.6;VEGGIE_BUN
+Tomato bun;8.7;VEGGIE_BUN
+Spinach bun;10.3;VEGGIE_BUN
+Rhubarb bun;12.4;FRUIT_BUN
+Strawberry bun;10.8;FRUIT_BUN
+Raspberry bun;13.3;FRUIT_BUN
+Wheat bread;12;PLAINGRAIN_BREAD
+Rye bread;15;PLAINGRAIN_BREAD
+Spelt bread;15;PLAINGRAIN_BREAD
+Wheat wholegrain bread;17;WHOLEGRAIN_BREAD
+Rye wholegrain bread;18;WHOLEGRAIN_BREAD
+Spelt wholegrain bread;19;WHOLEGRAIN_BREAD
+Black seed bread;15.5;SEEDTOPPING_BREAD
+Sesame bread;16.7;SEEDTOPPING_BREAD
+Linseed bread;16.2;SEEDTOPPING_BREAD
+Black seed bun;4.4;SEEDTOPPING_BUN
+Sesame bun;3.7;SEEDTOPPING_BUN
+Linseed bun;3.9;SEEDTOPPING_BUN
