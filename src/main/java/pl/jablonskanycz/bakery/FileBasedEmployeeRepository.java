@@ -1,12 +1,13 @@
 package pl.jablonskanycz.bakery;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.nio.file.StandardOpenOption.APPEND;
 
@@ -81,19 +82,51 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
 
     @Override
     public void updateEmployee(Employee employeeWithOldData, Employee employeeWithNewData) { //overwrite linii w pliku?
+//        try {
+//            Optional<Employee> client = Files.lines(employeePath)
+//                    .skip(1)
+//                    .filter(line -> {
+//                        String[] strings = line.split(",");
+//                        return Integer.parseInt(strings[0]) == employeeWithNewData.getId();
+//                    })
+//                    .map(e -> new Employee(
+//                            employeeWithNewData.getId(),
+//                            employeeWithNewData.getName(),
+//                            employeeWithNewData.getSurname(),
+//                            employeeWithNewData.getJobStartingDate()))
+//                    .findFirst();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         try {
-            Optional<Employee> client = Files.lines(employeePath)
-                    .skip(1)
-                    .filter(line -> {
-                        String[] strings = line.split(",");
-                        return Integer.parseInt(strings[0]) == employeeWithNewData.getId();
-                    })
-                    .map(e -> new Employee(
-                            employeeWithNewData.getId(),
-                            employeeWithNewData.getName(),
-                            employeeWithNewData.getSurname(),
-                            employeeWithNewData.getJobStartingDate()))
-                    .findFirst();
+            BufferedReader reader = new BufferedReader(new FileReader(employeePath.toString()));
+            List<String> newFileContent = reader.lines()
+                    .map(line -> line)
+                    .collect(Collectors.toList());
+            reader.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(employeePath.toString()));
+            for(int i = 0; i < newFileContent.size(); i++){
+                if(i == 0){
+                    writer.write(newFileContent.get(i));
+                    writer.newLine();
+                } else {
+                    writer.append(newFileContent.get(i));
+                    writer.newLine();
+                }
+            }
+            writer.flush();
+            System.out.println();
+
+//                String[] strings = line.split(",");
+//                return new Employee(
+//                        Integer.parseInt(strings[0]),
+//                        strings[1],
+//                        strings[2],
+//                        strings[3]);
+//            })
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
