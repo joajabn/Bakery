@@ -84,22 +84,15 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
         try {
             Optional<Employee> client = Files.lines(employeePath)
                     .skip(1)
-                    .map(line -> {
+                    .filter(line -> {
                         String[] strings = line.split(",");
-                        return new Employee(
-                                Integer.parseInt(strings[0]),
-                                strings[1],
-                                strings[2],
-                                strings[3]);
+                        return Integer.parseInt(strings[0]) == employeeWithNewData.getId();
                     })
-                    .filter(e -> e.equals(employeeWithOldData))
-                    .map(e -> {
-                        e.setId(employeeWithNewData.getId());
-                        e.setName(employeeWithNewData.getName());
-                        e.setSurname(employeeWithNewData.getSurname());
-                        e.setJobStartingDate(employeeWithNewData.getJobStartingDate());
-                        return e;
-                    })
+                    .map(e -> new Employee(
+                            employeeWithNewData.getId(),
+                            employeeWithNewData.getName(),
+                            employeeWithNewData.getSurname(),
+                            employeeWithNewData.getJobStartingDate()))
                     .findFirst();
         } catch (IOException e) {
             e.printStackTrace();
