@@ -16,7 +16,6 @@ import pl.jablonskanycz.bakery.products.FiledBasedProductRepository;
 import pl.jablonskanycz.bakery.products.ProductRepository;
 
 
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,8 +41,8 @@ public class BakeryApplication {
         ProductRepository productRepository = new FiledBasedProductRepository();
         EmployeeRepository employeeRepository = new FileBasedEmployeeRepository();
 
-        employeeRepository.updateEmployee(null, null);
-
+//        employeeRepository.updateEmployee(new Employee(2, "JACEK", "ROBAK", "2024-05-11T09:21:55.172758Z"), new Employee(2, "JACEK", "ROBACZEWSKI", "2024-05-11T09:21:55.172758Z"));
+        employeeRepository.deleteEmployee(new Employee(2, "JACEK", "ROBAK", "2024-05-11T09:21:55.172758Z"));
 
 //        List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
 //
@@ -70,11 +69,7 @@ public class BakeryApplication {
 //        }
 
 
-
-
-
     }
-
 
 
 //    private static List<Employee> readEmployessFrom(Path employeePath) throws IOException {
@@ -104,10 +99,6 @@ public class BakeryApplication {
 //                })
 //                .collect(Collectors.toList());
 //    }
-
-
-
-
 
 
 }
