@@ -9,7 +9,7 @@ public class ListBasedProductRepository implements ProductRepository {
     private List<Product> products = new ArrayList<>();
 
     @Override
-    public List<Product> findAll() {
+    public List<Product> getAll() {
         return products;
     }
 
