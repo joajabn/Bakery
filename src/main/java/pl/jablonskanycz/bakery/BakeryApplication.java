@@ -16,7 +16,6 @@ import pl.jablonskanycz.bakery.products.FiledBasedProductRepository;
 import pl.jablonskanycz.bakery.products.ProductRepository;
 
 
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,28 +41,27 @@ public class BakeryApplication {
         ProductRepository productRepository = new FiledBasedProductRepository();
         EmployeeRepository employeeRepository = new FileBasedEmployeeRepository();
 
-        Path addressPath = Path.of("src", "main", "resources", "ADDRESS.csv");
-        Path clientPath = Path.of("src", "main", "resources", "CLIENT.csv");
-        Path employeePath = Path.of("src", "main", "resources", "EMPLOYEE.csv");
-        Path productPath = Path.of("src", "main", "resources", "PRODUCT.csv");
+//        employeeRepository.updateEmployee(new Employee(2, "JACEK", "ROBAK", "2024-05-11T09:21:55.172758Z"), new Employee(2, "JACEK", "ROBACZEWSKI", "2024-05-11T09:21:55.172758Z"));
+        employeeRepository.deleteEmployee(new Employee(2, "JACEK", "ROBAK", "2024-05-11T09:21:55.172758Z"));
 
-        List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
+//        List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
+//
+//
+//        for (Address address : addresses) {
+//            System.out.println(address);; // a to wkłada do LISTY
+//        }
 
-
-        for (Address address : addresses) {
-            System.out.println(address);; // a to wkłada do LISTY
-        }
-
-        addressRepository.addAddress(Address.builder().latitude(16.89).longitude(21.43).build());
-
-
-//        List<Client> clients = readClientsFrom(clientPath, addressRepository); // pytanie
-//        // (adresRepo)
+//        addressRepository.addAddress(Address.builder().latitude(16.89).longitude(21.43).build());
+//        System.out.println(addressRepository.findById(2));
+//
+//        List<Client> clients = clientRepository.getAll();
 //
 //        for (Client client : clients) {
-//            clientRepository.addClient(client);
+//            System.out.println(client);
 //        }
 //
+//        System.out.println(clientRepository.getAll());
+////
 //        List<Employee> employees = readEmployessFrom(employeePath);
 //
 //        for (Employee employee : employees) {
@@ -71,9 +69,7 @@ public class BakeryApplication {
 //        }
 
 
-
     }
-
 
 
 //    private static List<Employee> readEmployessFrom(Path employeePath) throws IOException {
@@ -103,10 +99,6 @@ public class BakeryApplication {
 //                })
 //                .collect(Collectors.toList());
 //    }
-
-
-
-
 
 
 }

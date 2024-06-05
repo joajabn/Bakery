@@ -1,8 +1,5 @@
 package pl.jablonskanycz.bakery.clients;
 
-import pl.jablonskanycz.bakery.clients.Client;
-import pl.jablonskanycz.bakery.clients.ClientRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,7 +25,7 @@ public class ListBasedClientRepository implements ClientRepository {
     }
 
     @Override
-    public void updateClient(Client clientToUpdate) {
+    public void updateClient(Client clientWithOldData, Client clientWithNewData) {
 
     }
 

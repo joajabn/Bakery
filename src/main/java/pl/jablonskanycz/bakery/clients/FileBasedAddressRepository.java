@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.APPEND;
@@ -50,7 +51,21 @@ public class FileBasedAddressRepository implements AddressRepository {
 
     @Override
     public Address findById(int id) {
-        return null;
+        Address address = null;
+        try {
+            return Files.lines(addressPath)
+                    .skip(1)
+                    .map(line -> {
+                        String[] strings = line.split(",");
+                        return new Address(Integer.parseInt(strings[0]), Double.parseDouble(strings[1]), Double.parseDouble(strings[2]));
+                    })
+                    .filter(a -> id == a.getId())
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("There's no clients with given address_id in our bakery."));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 
 

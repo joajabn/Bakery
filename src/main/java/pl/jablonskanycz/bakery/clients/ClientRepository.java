@@ -6,7 +6,7 @@ public interface ClientRepository {
     List<Client> getAll();
     Client findBySurname(String surname);
     void addClient(Client clientToAdd);
-    void updateClient(Client clientToUpdate);
+    void updateClient(Client clientWithOldData, Client clientWithNewData);
     void deleteClient(Client clientToRemove);
 
 }
