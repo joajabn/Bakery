@@ -56,12 +56,6 @@ public class BakeryApplication {
 //
 //        List<Client> clients = clientRepository.getAll();
 //
-//        for (Client client : clients) {
-//            System.out.println(client);
-//        }
-//
-//        System.out.println(clientRepository.getAll());
-////
 //        List<Employee> employees = readEmployessFrom(employeePath);
 //
 //        for (Employee employee : employees) {

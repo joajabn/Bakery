@@ -1,6 +1,6 @@
 package pl.jablonskanycz.bakery.products;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -36,7 +36,7 @@ public class FiledBasedProductRepository implements ProductRepository {
   }*/
 
     @Override
-    public List<Product> findAll() {
+    public List<Product> getAll() {
         List<Product> products = null;
         try {
             products = Files.lines(productPath)
@@ -117,24 +117,33 @@ public class FiledBasedProductRepository implements ProductRepository {
     }
 
     @Override
-    public void deleteProduct(Product productToRemove) { //do dokończenia, gdy rozpracuje usuwanie linii w pliku
+    public void deleteProduct(Product productToRemove) {
         try {
-            Optional<Product> client = Files.lines(productPath)
-                    .skip(1)
-                    .map(line -> {
-                        String[] strings = line.split(",");
-                        return createProductFromProductType(
-                                strings[0],
-                                Integer.parseInt(strings[1]),
-                                ProductType.valueOf(strings[2])
-                        );
-                    })
-                    .filter(p -> p.equals(productToRemove))
-                    .findFirst();
-
+            BufferedReader reader = new BufferedReader(new FileReader(productPath.toString()));
+            List<String> newFileContent = reader.lines().collect(Collectors.toList());
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (newFileContent.get(i).startsWith(productToRemove.getName())) {
+                    newFileContent.remove(newFileContent.get(i));
+                }
+            }
+            reader.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(productPath.toString()));
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (i == 0) {
+                    writer.write(newFileContent.get(i));
+                    writer.newLine();
+                } else {
+                    writer.append(newFileContent.get(i));
+                    writer.newLine();
+                }
+            }
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public Product createProductFromProductType(String name, double price, ProductType productType) {
