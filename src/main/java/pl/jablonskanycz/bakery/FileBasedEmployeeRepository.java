@@ -81,32 +81,22 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public void updateEmployee(Employee employeeWithOldData, Employee employeeWithNewData) { //overwrite linii w pliku?
-//        try {
-//            Optional<Employee> client = Files.lines(employeePath)
-//                    .skip(1)
-//                    .filter(line -> {
-//                        String[] strings = line.split(",");
-//                        return Integer.parseInt(strings[0]) == employeeWithNewData.getId();
-//                    })
-//                    .map(e -> new Employee(
-//                            employeeWithNewData.getId(),
-//                            employeeWithNewData.getName(),
-//                            employeeWithNewData.getSurname(),
-//                            employeeWithNewData.getJobStartingDate()))
-//                    .findFirst();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    public void updateEmployee(Employee employeeWithOldData, Employee employeeWithNewData) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(employeePath.toString()));
             List<String> newFileContent = reader.lines()
-                    .map(line -> line)
+                    .map(line -> {
+                        if (line.startsWith(String.valueOf(employeeWithOldData.getId()))) {
+                            return employeeWithNewData.getId() + "," + employeeWithNewData.getName() + "," + employeeWithNewData.getSurname() + "," + employeeWithNewData.getJobStartingDate();
+                        } else {
+                            return line;
+                        }
+                    })
                     .collect(Collectors.toList());
             reader.close();
             BufferedWriter writer = new BufferedWriter(new FileWriter(employeePath.toString()));
-            for(int i = 0; i < newFileContent.size(); i++){
-                if(i == 0){
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (i == 0) {
                     writer.write(newFileContent.get(i));
                     writer.newLine();
                 } else {
@@ -115,16 +105,6 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
                 }
             }
             writer.flush();
-            System.out.println();
-
-//                String[] strings = line.split(",");
-//                return new Employee(
-//                        Integer.parseInt(strings[0]),
-//                        strings[1],
-//                        strings[2],
-//                        strings[3]);
-//            })
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -134,25 +114,60 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public void deleteEmployee(Employee employeeToRemove) { //znowu, usunięcie linii :(
+    public void deleteEmployee(Employee employeeToRemove) {
         try {
-            Optional<Employee> employee = Files.lines(employeePath)
-                    .skip(1)
-                    .map(line -> {
-                        String[] strings = line.split(",");
-                        return new Employee(
-                                Integer.parseInt(strings[0]),
-                                strings[1],
-                                strings[2],
-                                strings[3]);
-                    })
-                    .filter(e -> e.equals(employeeToRemove))
-                    .findFirst();
-
+            BufferedReader reader = new BufferedReader(new FileReader(employeePath.toString()));
+            List<String> newFileContent = reader.lines().collect(Collectors.toList());
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (newFileContent.get(i).startsWith(String.valueOf(employeeToRemove.getId()))) {
+                    newFileContent.remove(newFileContent.get(i));
+                }
+            }
+            reader.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(employeePath.toString()));
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (i == 0) {
+                    writer.write(newFileContent.get(i));
+                    writer.newLine();
+                } else {
+                    writer.append(newFileContent.get(i));
+                    writer.newLine();
+                }
+            }
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }
 
+/* stream<string> to object
+                String[] strings = line.split(",");
+                return new Employee(
+                        Integer.parseInt(strings[0]),
+                        strings[1],
+                        strings[2],
+                        strings[3]);
+            })
+*/
+
+/* update employee with stream
+        try {
+            Optional<Employee> client = Files.lines(employeePath)
+                    .skip(1)
+                    .filter(line -> {
+                        String[] strings = line.split(",");
+                        return Integer.parseInt(strings[0]) == employeeWithNewData.getId();
+                    })
+                    .map(e -> new Employee(
+                            employeeWithNewData.getId(),
+                            employeeWithNewData.getName(),
+                            employeeWithNewData.getSurname(),
+                            employeeWithNewData.getJobStartingDate()))
+                    .findFirst();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
