@@ -1,6 +1,6 @@
 package pl.jablonskanycz.bakery.clients;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -77,51 +77,68 @@ public class FileBasedClientRepository implements ClientRepository {
     }
 
     @Override
-    public void updateClient(Client clientWithOldData, Client clientWithNewData) { //jak zrobić overwrite jednej linii?
+    public void updateClient(Client clientWithOldData, Client clientWithNewData) {
         try {
-            Optional<Client> client = Files.lines(clientPath)
-                    .skip(1)
+            BufferedReader reader = new BufferedReader(new FileReader(clientPath.toString()));
+            List<String> newFileContent = reader.lines()
                     .map(line -> {
-                        String[] strings = line.split(",");
-                        return new Client(
-                                Integer.parseInt(strings[0]),
-                                strings[1],
-                                strings[2],
-                                addressRepository.findById(Integer.parseInt(strings[3])));
+                        if (line.startsWith(String.valueOf(clientWithOldData.getId()))) {
+                            return clientWithNewData.getId() + "," + clientWithNewData.getName() + "," + clientWithNewData.getSurname() + "," + clientWithNewData.getAddress().getId();
+                        } else {
+                            return line;
+                        }
                     })
-                    .filter(c -> c.equals(clientWithOldData))
-                    .map(c -> {
-                        c.setId(clientWithNewData.getId());
-                        c.setName(clientWithNewData.getName());
-                        c.setSurname(clientWithNewData.getSurname());
-                        c.setAddress(clientWithNewData.getAddress());
-                        return c;
-                    })
-                    .findFirst();
+                    .collect(Collectors.toList());
+            reader.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(clientPath.toString()));
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (i == 0) {
+                    writer.write(newFileContent.get(i));
+                    writer.newLine();
+                } else {
+                    writer.append(newFileContent.get(i));
+                    writer.newLine();
+                }
+            }
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
-    public void deleteClient(Client clientToRemove) { //znowu, jak usunąć wybraną linie?
+    public void deleteClient(Client clientToRemove) {
         try {
-            Optional<Client> client = Files.lines(clientPath)
-                    .skip(1)
-                    .map(line -> {
-                        String[] strings = line.split(",");
-                        return new Client(
-                                Integer.parseInt(strings[0]),
-                                strings[1],
-                                strings[2],
-                                addressRepository.findById(Integer.parseInt(strings[3])));
-                    })
-                    .filter(c -> c.equals(clientToRemove))
-                    .findFirst();
-
+            BufferedReader reader = new BufferedReader(new FileReader(clientPath.toString()));
+            List<String> newFileContent = reader.lines().collect(Collectors.toList());
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (newFileContent.get(i).startsWith(String.valueOf(clientToRemove.getId()))) {
+                    newFileContent.remove(newFileContent.get(i));
+                }
+            }
+            reader.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(clientPath.toString()));
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (i == 0) {
+                    writer.write(newFileContent.get(i));
+                    writer.newLine();
+                } else {
+                    writer.append(newFileContent.get(i));
+                    writer.newLine();
+                }
+            }
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 }
+
+
+

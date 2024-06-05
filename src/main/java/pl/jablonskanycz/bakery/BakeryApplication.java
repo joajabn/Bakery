@@ -46,10 +46,8 @@ public class BakeryApplication {
         Path productPath = Path.of("src", "main", "resources", "PRODUCT.csv");
 
         List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
-
-
-
-
+//
+//
 //        for (Address address : addresses) {
 //            System.out.println(address);; // a to wkłada do LISTY
 //        }
@@ -57,6 +55,8 @@ public class BakeryApplication {
 //        addressRepository.addAddress(Address.builder().latitude(16.89).longitude(21.43).build());
 //        System.out.println(addressRepository.findById(2));
 
+//        clientRepository.updateClient(new Client(2, "KAROL", "NOWAK", addressRepository.findById(2)), new Client(2, "KAROL", "NOWACKI", addressRepository.findById(2)));
+        clientRepository.deleteClient(new Client(2, "KAROL", "NOWAK", addressRepository.findById(2)));
 //        List<Client> clients = clientRepository.getAll();
 //
 //        for (Client client : clients) {
