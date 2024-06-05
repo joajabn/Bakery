@@ -153,7 +153,7 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
             })
 */
 
-/* update employee with string
+/* update employee with stream
         try {
             Optional<Employee> client = Files.lines(employeePath)
                     .skip(1)
