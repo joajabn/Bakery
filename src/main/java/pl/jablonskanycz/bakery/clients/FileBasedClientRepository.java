@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.APPEND;
@@ -13,25 +12,26 @@ import static java.nio.file.StandardOpenOption.APPEND;
 public class FileBasedClientRepository implements ClientRepository {
     private static final Path clientPath = Path.of("src", "main", "resources", "CLIENT.csv");
     private AddressRepository addressRepository = new FileBasedAddressRepository();
+
     @Override
     public List<Client> getAll() {
-            List<Client> clients = null;
-            try {
-                clients = Files.lines(clientPath)
-                .skip(1)
-                .map(line -> {
-                    String[] client = line.split(",");
-                    return new Client(
-                        Integer.parseInt(client[0]),
-                        client[1],
-                        client[2],
-                        addressRepository.findById(Integer.parseInt(client[3])));
-                })
-                .collect(Collectors.toList());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return clients;
+        List<Client> clients = null;
+        try {
+            clients = Files.lines(clientPath)
+                    .skip(1)
+                    .map(line -> {
+                        String[] client = line.split(",");
+                        return new Client(
+                                Integer.parseInt(client[0]),
+                                client[1],
+                                client[2],
+                                addressRepository.findById(Integer.parseInt(client[3])));
+                    })
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return clients;
     }
 
     @Override
@@ -66,14 +66,23 @@ public class FileBasedClientRepository implements ClientRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String lastId = clientsList.get(clientsList.size() - 1).split(",")[0];
-        int newId = Integer.parseInt(lastId) + 1;
-        String line = "\n" + newId + "," + clientToAdd.getName() + "," + clientToAdd.getSurname() + "," + clientToAdd.getAddress();
+        String line = null;
+        if (!clientsList.isEmpty()) {
+            int newId = createNewId(clientsList);
+            line = "\n" + newId + "," + clientToAdd.getName() + "," + clientToAdd.getSurname() + "," + clientToAdd.getAddress();
+        } else {
+            int id = 1;
+            line = "\n" + id + "," + clientToAdd.getName() + "," + clientToAdd.getSurname() + "," + clientToAdd.getAddress();
+        }
         try {
             Files.writeString(clientPath, line, APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private int createNewId(List<String> clientsList) {
+        return Integer.parseInt(clientsList.get(clientsList.size() - 1).split(",")[0]) + 1;
     }
 
     @Override
