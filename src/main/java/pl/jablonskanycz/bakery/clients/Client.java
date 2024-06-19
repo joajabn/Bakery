@@ -7,6 +7,7 @@ import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 public class Client {
     private int id;

@@ -1,11 +1,9 @@
 package pl.jablonskanycz.bakery.products;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import pl.jablonskanycz.bakery.products.bread.PlainGrainBreadFactory;
@@ -15,6 +13,7 @@ import pl.jablonskanycz.bakery.products.bun.FruitBunFactory;
 import pl.jablonskanycz.bakery.products.bun.SeedToppingBunFactory;
 import pl.jablonskanycz.bakery.products.bun.VeggieBunFactory;
 
+import static java.nio.file.StandardOpenOption.APPEND;
 import static pl.jablonskanycz.bakery.products.ProductType.*;
 
 public class FiledBasedProductRepository implements ProductRepository {
@@ -37,7 +36,7 @@ public class FiledBasedProductRepository implements ProductRepository {
   }*/
 
     @Override
-    public List<Product> findAll() {
+    public List<Product> getAll() {
         List<Product> products = null;
         try {
             products = Files.lines(productPath)
@@ -55,21 +54,95 @@ public class FiledBasedProductRepository implements ProductRepository {
 
     @Override
     public Product findByName(String name) {
-        return null;
+        Product product = null;
+        try {
+            return Files.lines(productPath)
+                    .skip(1)
+                    .map(line -> {
+                        String[] strings = line.split(",");
+                        return createProductFromProductType(
+                                strings[0],
+                                Integer.parseInt(strings[1]),
+                                ProductType.valueOf(strings[2])
+                        );
+                    })
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("There's no such product in our bakery"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return product;
+
     }
 
     @Override
     public List<Product> findByType(ProductType productType) {
-        return null;
+        List<Product> products = null;
+        try {
+            return Files.lines(productPath)
+                    .skip(1)
+                    .map(line -> {
+                        String[] strings = line.split(",");
+                        return createProductFromProductType(
+                                strings[0],
+                                Integer.parseInt(strings[1]),
+                                ProductType.valueOf(strings[2])
+                        );
+                    })
+                    .filter(p -> p.getProductType().equals(productType))
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return products;
     }
 
     @Override
     public void addProduct(Product productToAdd) {
+        List<String> productsList = null;
+        try {
+            productsList = Files.lines(productPath)
+                    .toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String line = "\n" + productToAdd.getName() + "," + productToAdd.getPrice() + "," + productToAdd.getProductType();
+        try {
+            Files.writeString(productPath, line, APPEND);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void deleteProduct(Product productToRemove) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(productPath.toString()));
+            List<String> newFileContent = reader.lines().collect(Collectors.toList());
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (newFileContent.get(i).startsWith(productToRemove.getName())) {
+                    newFileContent.remove(newFileContent.get(i));
+                }
+            }
+            reader.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(productPath.toString()));
+            for (int i = 0; i < newFileContent.size(); i++) {
+                if (i == 0) {
+                    writer.write(newFileContent.get(i));
+                    writer.newLine();
+                } else {
+                    writer.append(newFileContent.get(i));
+                    writer.newLine();
+                }
+            }
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
