@@ -42,10 +42,10 @@ public class BakeryApplication {
         ProductRepository productRepository = new FiledBasedProductRepository();
         EmployeeRepository employeeRepository = new FileBasedEmployeeRepository();
 
-        Path employeePath = Path.of("src", "main", "resources", "EMPLOYEE.csv");
-        Path productPath = Path.of("src", "main", "resources", "PRODUCT.csv");
+        employeeRepository.updateEmployee(null, null);
 
-        List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
+
+//        List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
 //
 //
 //        for (Address address : addresses) {
@@ -54,16 +54,8 @@ public class BakeryApplication {
 
 //        addressRepository.addAddress(Address.builder().latitude(16.89).longitude(21.43).build());
 //        System.out.println(addressRepository.findById(2));
-
-//        clientRepository.updateClient(new Client(2, "KAROL", "NOWAK", addressRepository.findById(2)), new Client(2, "KAROL", "NOWACKI", addressRepository.findById(2)));
-        clientRepository.deleteClient(new Client(2, "KAROL", "NOWAK", addressRepository.findById(2)));
+//
 //        List<Client> clients = clientRepository.getAll();
-//
-//        for (Client client : clients) {
-//            System.out.println(client);
-//        }
-//
-//        System.out.println(clientRepository.getAll());
 //
 //        List<Employee> employees = readEmployessFrom(employeePath);
 //
