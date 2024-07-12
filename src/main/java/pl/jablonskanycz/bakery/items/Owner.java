@@ -1,6 +1,6 @@
-package pl.jablonskanycz.bakery;
+package pl.jablonskanycz.bakery.items;
 
-import java.time.Instant;
+import pl.jablonskanycz.bakery.employee.Employee;
 
 public class Owner extends Employee {
 

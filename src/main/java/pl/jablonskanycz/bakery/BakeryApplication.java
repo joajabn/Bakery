@@ -4,13 +4,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 import pl.jablonskanycz.bakery.clients.*;
-import pl.jablonskanycz.bakery.products.*;
-import pl.jablonskanycz.bakery.products.bun.*;
-import pl.jablonskanycz.bakery.products.bread.*;
+import pl.jablonskanycz.bakery.clients.address.FileBasedAddressRepository;
+import pl.jablonskanycz.bakery.employee.EmployeeRepository;
+import pl.jablonskanycz.bakery.employee.FileBasedEmployeeRepository;
 
-import pl.jablonskanycz.bakery.clients.Address;
-import pl.jablonskanycz.bakery.clients.AddressRepository;
-import pl.jablonskanycz.bakery.clients.Client;
+import pl.jablonskanycz.bakery.clients.address.AddressRepository;
 import pl.jablonskanycz.bakery.clients.ClientRepository;
 import pl.jablonskanycz.bakery.products.FiledBasedProductRepository;
 import pl.jablonskanycz.bakery.products.ProductRepository;
@@ -18,10 +16,6 @@ import pl.jablonskanycz.bakery.products.ProductRepository;
 
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class BakeryApplication {

@@ -1,4 +1,4 @@
-package pl.jablonskanycz.bakery.clients;
+package pl.jablonskanycz.bakery.clients.address;
 
 import java.util.List;
 
