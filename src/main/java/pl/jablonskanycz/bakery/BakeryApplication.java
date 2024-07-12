@@ -4,13 +4,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 import pl.jablonskanycz.bakery.clients.*;
-import pl.jablonskanycz.bakery.products.*;
-import pl.jablonskanycz.bakery.products.bun.*;
-import pl.jablonskanycz.bakery.products.bread.*;
+import pl.jablonskanycz.bakery.clients.address.FileBasedAddressRepository;
+import pl.jablonskanycz.bakery.employee.EmployeeRepository;
+import pl.jablonskanycz.bakery.employee.FileBasedEmployeeRepository;
 
-import pl.jablonskanycz.bakery.clients.Address;
-import pl.jablonskanycz.bakery.clients.AddressRepository;
-import pl.jablonskanycz.bakery.clients.Client;
+import pl.jablonskanycz.bakery.clients.address.AddressRepository;
 import pl.jablonskanycz.bakery.clients.ClientRepository;
 import pl.jablonskanycz.bakery.products.FiledBasedProductRepository;
 import pl.jablonskanycz.bakery.products.ProductRepository;
@@ -18,10 +16,6 @@ import pl.jablonskanycz.bakery.products.ProductRepository;
 
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class BakeryApplication {
@@ -42,10 +36,10 @@ public class BakeryApplication {
         ProductRepository productRepository = new FiledBasedProductRepository();
         EmployeeRepository employeeRepository = new FileBasedEmployeeRepository();
 
-        Path employeePath = Path.of("src", "main", "resources", "EMPLOYEE.csv");
-        Path productPath = Path.of("src", "main", "resources", "PRODUCT.csv");
+        employeeRepository.updateEmployee(null, null);
 
-        List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
+
+//        List<Address> addresses = addressRepository.getAll(); // to czyta z PLIKU
 //
 //
 //        for (Address address : addresses) {
@@ -54,16 +48,8 @@ public class BakeryApplication {
 
 //        addressRepository.addAddress(Address.builder().latitude(16.89).longitude(21.43).build());
 //        System.out.println(addressRepository.findById(2));
-
-//        clientRepository.updateClient(new Client(2, "KAROL", "NOWAK", addressRepository.findById(2)), new Client(2, "KAROL", "NOWACKI", addressRepository.findById(2)));
-        clientRepository.deleteClient(new Client(2, "KAROL", "NOWAK", addressRepository.findById(2)));
+//
 //        List<Client> clients = clientRepository.getAll();
-//
-//        for (Client client : clients) {
-//            System.out.println(client);
-//        }
-//
-//        System.out.println(clientRepository.getAll());
 //
 //        List<Employee> employees = readEmployessFrom(employeePath);
 //

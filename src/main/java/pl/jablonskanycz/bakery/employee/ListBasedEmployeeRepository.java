@@ -1,4 +1,4 @@
-package pl.jablonskanycz.bakery;
+package pl.jablonskanycz.bakery.employee;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ListBasedEmployeeRepository implements EmployeeRepository {
     }
 
     @Override
-    public void updateEmployee(Employee employeeToUpdate) {
+    public void updateEmployee(Employee employeeWithOldData, Employee employeeWithNewData) {
 
     }
 

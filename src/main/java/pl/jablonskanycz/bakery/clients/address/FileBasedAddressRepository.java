@@ -1,8 +1,10 @@
-package pl.jablonskanycz.bakery.clients;
+package pl.jablonskanycz.bakery.clients.address;
+
+import pl.jablonskanycz.bakery.clients.address.Address;
+import pl.jablonskanycz.bakery.clients.address.AddressRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.NoSuchElementException;

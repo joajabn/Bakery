@@ -1,6 +1,7 @@
-package pl.jablonskanycz.bakery.clients;
+package pl.jablonskanycz.bakery.clients.address;
 
-import lombok.RequiredArgsConstructor;
+import pl.jablonskanycz.bakery.clients.address.Address;
+import pl.jablonskanycz.bakery.clients.address.AddressRepository;
 
 import java.util.ArrayList;
 import java.util.List;
