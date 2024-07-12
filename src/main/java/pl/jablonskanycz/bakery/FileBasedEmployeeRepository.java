@@ -3,31 +3,21 @@ package pl.jablonskanycz.bakery;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.nio.file.StandardOpenOption.APPEND;
 
 public class FileBasedEmployeeRepository implements EmployeeRepository {
-    private static final Path employeePath = Path.of("src", "main", "resources", "EMPLOYEE.csv");
+    private static final Path EMPLOYEE_PATH = Path.of("src", "main", "resources", "EMPLOYEE.csv");
 
     @Override
     public List<Employee> getAll() {
-        List<Employee> employees = null;
+        List<Employee> employees = new ArrayList<>();
         try {
-            employees = Files.lines(employeePath)
+            employees = Files.lines(EMPLOYEE_PATH)
                     .skip(1)
-                    .map(line -> {
-                        String[] employee = line.split(",");
-                        return new Employee(
-                                Integer.parseInt(employee[0]),
-                                employee[1],
-                                employee[2],
-                                employee[3]);
-                    })
+                    .map(FileBasedEmployeeRepository::getEmployee)
                     .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,52 +28,49 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
 
     @Override
     public Employee findBySurname(String surname) {
-        Employee employee = null;
-        try {
-            return Files.lines(employeePath)
-                    .skip(1)
-                    .map(line -> {
-                        String[] strings = line.split(",");
-                        return new Employee(
-                                Integer.parseInt(strings[0]),
-                                strings[1],
-                                strings[2],
-                                strings[3]);
-                    })
-                    .filter(e -> surname.equals(e.getSurname()))
-                    .findFirst()
-                    .orElseThrow(() -> new NoSuchElementException("Client list is empty"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return employee;
+        return getAll().stream()
+                .filter(e -> surname.equals(e.getSurname()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("Client list is empty"));
+    }
 
+    private static Employee getEmployee(String line) {
+        String[] employee = line.split(",");
+        return new Employee(
+                Integer.parseInt(employee[0]),
+                employee[1],
+                employee[2],
+                employee[3]);
     }
 
     @Override
     public void addEmployee(Employee employeeToAdd) {
-        List<String> employeeList = null;
+        List<String> employeeList = new ArrayList<>();
         try {
-            employeeList = Files.lines(employeePath)
+            employeeList = Files.lines(EMPLOYEE_PATH)
                     .toList();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String lastId = employeeList.get(employeeList.size() - 1).split(",")[0];
-        int newId = Integer.parseInt(lastId) + 1;
-        String line = "\n" + newId + "," + employeeToAdd.getName() + "," + employeeToAdd.getSurname() + "," + employeeToAdd.getJobStartingDate();
+        String line = convertEmployeeToString(employeeToAdd, employeeList);
         try {
-            Files.writeString(employeePath, line, APPEND);
+            Files.writeString(EMPLOYEE_PATH, line, APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private static String convertEmployeeToString(Employee employeeToAdd, List<String> employeeList) {
+        String lastId = employeeList.getLast().split(",")[0];
+        int newId = Integer.parseInt(lastId) + 1;
+        return "\n" + newId + "," + employeeToAdd.getName() + "," + employeeToAdd.getSurname() + "," + employeeToAdd.getJobStartingDate();
     }
 
     @Override
     public void updateEmployee(Employee employeeWithOldData, Employee employeeWithNewData) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(employeePath.toString()));
+            BufferedReader reader = new BufferedReader(new FileReader(EMPLOYEE_PATH.toString()));
             List<String> newFileContent = reader.lines()
                     .map(line -> {
                         if (line.startsWith(String.valueOf(employeeWithOldData.getId()))) {
@@ -94,7 +81,7 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
                     })
                     .collect(Collectors.toList());
             reader.close();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(employeePath.toString()));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(EMPLOYEE_PATH.toString()));
             for (int i = 0; i < newFileContent.size(); i++) {
                 if (i == 0) {
                     writer.write(newFileContent.get(i));
@@ -116,7 +103,7 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
     @Override
     public void deleteEmployee(Employee employeeToRemove) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(employeePath.toString()));
+            BufferedReader reader = new BufferedReader(new FileReader(EMPLOYEE_PATH.toString()));
             List<String> newFileContent = reader.lines().collect(Collectors.toList());
             for (int i = 0; i < newFileContent.size(); i++) {
                 if (newFileContent.get(i).startsWith(String.valueOf(employeeToRemove.getId()))) {
@@ -124,7 +111,7 @@ public class FileBasedEmployeeRepository implements EmployeeRepository {
                 }
             }
             reader.close();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(employeePath.toString()));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(EMPLOYEE_PATH.toString()));
             for (int i = 0; i < newFileContent.size(); i++) {
                 if (i == 0) {
                     writer.write(newFileContent.get(i));
