@@ -22,5 +22,10 @@ public class PersonEntity {
     private String firstName;
 
     @Column(name = "last_name")
-    private String lastNAme;
+    private String lastName;
+
+    @Override
+    public String toString() {
+        return personId + " , " + firstName + " , " + lastName + "\n";
+    }
 }
