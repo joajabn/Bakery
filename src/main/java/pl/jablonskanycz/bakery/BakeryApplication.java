@@ -18,5 +18,14 @@ public class BakeryApplication {
         System.out.println("Service: ");
         PersonService personService = context.getBean(PersonService.class);
         System.out.println(personService.getAllPeople());
+        personService.addPerson("JOANNA", "NYCZ");
+        System.out.println(personService.getAllPeople());
+        System.out.println("update person:");
+        personService.updatePerson(2L, "Karol", "Nowakowski");
+        System.out.println(personService.getAllPeople());
+        System.out.println("delete:");
+        personService.deletePerson(12L);
+        System.out.println(personService.getAllPeople());
+
     }
 }
