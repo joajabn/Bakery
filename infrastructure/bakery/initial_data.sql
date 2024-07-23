@@ -78,12 +78,14 @@ Insert into order_details (order_id, product_id) values
 (3, 14),
 (4, 16);
 CREATE SEQUENCE IF NOT EXISTS person_seq;
+CREATE SEQUENCE IF NOT EXISTS address_seq;
 CREATE SEQUENCE IF NOT EXISTS clients_seq;
 CREATE SEQUENCE IF NOT EXISTS employees_seq;
 CREATE SEQUENCE IF NOT EXISTS orders_seq;
 CREATE SEQUENCE IF NOT EXISTS products_seq;
 
 SELECT setval('person_seq', (SELECT MAX(p.person_id) FROM person p));
+SELECT setval('address_seq', (SELECT MAX(a.address_id) FROM address a));
 SELECT setval('clients_seq', (SELECT MAX(c.client_id) FROM clients c));
 SELECT setval('employees_seq', (SELECT MAX(e.employee_id) FROM employees e));
 SELECT setval('orders_seq', (SELECT MAX(o.order_id) FROM orders o));
