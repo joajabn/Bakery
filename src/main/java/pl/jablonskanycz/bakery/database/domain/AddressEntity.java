@@ -23,4 +23,9 @@ public class AddressEntity {
     @Column(name = "longitude")
     private Double longitude;
 
+    @Override
+    public String toString() {
+        return addressId + " , " + latitude + " , " + longitude + "\n";
+    }
+
 }
