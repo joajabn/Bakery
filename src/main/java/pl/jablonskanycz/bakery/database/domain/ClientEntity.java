@@ -22,7 +22,7 @@ public class ClientEntity {
     @JoinColumn(name = "client_id", referencedColumnName = "client_id")
     private PersonEntity person;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private AddressEntity address;
 

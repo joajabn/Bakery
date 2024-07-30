@@ -36,8 +36,7 @@ public class AddressService {
         return addressRepository.findById(addressToUpdateId).orElseThrow(() -> new RuntimeException("Address not found"));
     }
 
-//    TODO
-//    public void deleteAddress(Long addressToDeleteId){
-//        addressRepository.delete(returnAddressIfExists(addressToDeleteId));
-//    }
+    public void deleteAddress(Long addressToDeleteId){
+        addressRepository.delete(returnAddressIfExists(addressToDeleteId));
+    }
 }

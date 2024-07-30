@@ -23,6 +23,9 @@ public class AddressEntity {
     @Column(name = "longitude")
     private Double longitude;
 
+    @OneToOne(mappedBy = "address")
+    private ClientEntity client;
+
     @Override
     public String toString() {
         return addressId + " , " + latitude + " , " + longitude + "\n";
