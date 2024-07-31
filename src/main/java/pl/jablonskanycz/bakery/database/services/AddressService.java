@@ -33,10 +33,11 @@ public class AddressService {
     }
 
     private AddressEntity returnAddressIfExists(Long addressToUpdateId) {
-        return addressRepository.findById(addressToUpdateId).orElseThrow(() -> new RuntimeException("Address not found"));
+        return addressRepository.findById(addressToUpdateId).orElseThrow(() -> new IllegalArgumentException("Address with given id does not exist"));
     }
 
     public void deleteAddress(Long addressToDeleteId){
-        addressRepository.delete(returnAddressIfExists(addressToDeleteId));
+        AddressEntity addressToDelete = returnAddressIfExists(addressToDeleteId);
+        addressRepository.delete(addressToDelete);
     }
 }
