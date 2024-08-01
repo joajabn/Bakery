@@ -23,7 +23,7 @@ public class AddressEntity {
     @Column(name = "longitude")
     private Double longitude;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
     private ClientEntity client;
 
     @Override

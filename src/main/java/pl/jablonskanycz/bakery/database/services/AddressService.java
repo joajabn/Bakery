@@ -49,6 +49,7 @@ public class AddressService {
         if(addressToDelete.isPresent()){
             log.info("Deleting address with ID: {}", addressToDeleteId);
             addressRepository.delete(addressToDelete.get());
+            log.info("Address with ID: {} successfully deleted", addressToDeleteId);
         } else {
             log.warn("Address with ID: {} not found", addressToDeleteId);
         }
