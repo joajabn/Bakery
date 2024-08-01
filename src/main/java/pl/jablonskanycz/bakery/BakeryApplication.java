@@ -30,14 +30,14 @@ public class BakeryApplication {
 //        System.out.println(personService.getAllPeople());
         System.out.println("Address service:");
         AddressService addressService = context.getBean(AddressService.class);
-        System.out.println(addressService.getAllAddresses());
-        addressService.addAddress(15.46, 17.85);
-        System.out.println(addressService.getAllAddresses());
-        System.out.println("Update address:");
-        addressService.updateAddress(1L, 16.90, 18.30);
-        System.out.println(addressService.getAllAddresses());
-        System.out.println("Delete address");
-        addressService.deleteAddress(15L);
+//        System.out.println(addressService.getAllAddresses());
+//        addressService.addAddress(15.46, 17.85);
+//        System.out.println(addressService.getAllAddresses());
+//        System.out.println("Update address:");
+//        addressService.updateAddress(1L, 16.90, 18.30);
+//        System.out.println(addressService.getAllAddresses());
+//        System.out.println("Delete address");
+        addressService.deleteAddress(1L);
         System.out.println(addressService.getAllAddresses());
 
     }

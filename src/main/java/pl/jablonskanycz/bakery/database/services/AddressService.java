@@ -2,6 +2,7 @@ package pl.jablonskanycz.bakery.database.services;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.jablonskanycz.bakery.database.domain.AddressEntity;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class AddressService {
 
     @Autowired
@@ -41,8 +43,14 @@ public class AddressService {
         return addressRepository.findById(addressToUpdateId);
     }
 
+    @Transactional
     public void deleteAddress(Long addressToDeleteId) {
         Optional<AddressEntity> addressToDelete = returnAddressIfExists(addressToDeleteId);
-        addressToDelete.ifPresent(addressEntity -> addressRepository.delete(addressEntity));
+        if(addressToDelete.isPresent()){
+            log.info("Deleting address with ID: {}", addressToDeleteId);
+            addressRepository.delete(addressToDelete.get());
+        } else {
+            log.warn("Address with ID: {} not found", addressToDeleteId);
+        }
     }
 }
