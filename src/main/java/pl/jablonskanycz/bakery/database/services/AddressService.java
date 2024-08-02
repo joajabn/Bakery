@@ -2,15 +2,18 @@ package pl.jablonskanycz.bakery.database.services;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.jablonskanycz.bakery.database.domain.AddressEntity;
 import pl.jablonskanycz.bakery.database.repositories.AddressRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class AddressService {
 
     @Autowired
@@ -26,18 +29,23 @@ public class AddressService {
 
     @Transactional
     public void updateAddress(Long addressToUpdateId, Double latitude, Double longitude) {
-        AddressEntity addressToUpdate = returnAddressIfExists(addressToUpdateId);
-        addressToUpdate.setLatitude(latitude);
-        addressToUpdate.setLongitude(longitude);
-        addressRepository.save(addressToUpdate);
+        Optional<AddressEntity> addressToUpdate = returnAddressIfExists(addressToUpdateId);
+        if (addressToUpdate.isPresent()) {
+            addressToUpdate.get().setLatitude(latitude);
+            addressToUpdate.get().setLongitude(longitude);
+            addressRepository.save(addressToUpdate.get());
+        } else {
+            throw new IllegalStateException("Address with given id does not exist");
+        }
     }
 
-    private AddressEntity returnAddressIfExists(Long addressToUpdateId) {
-        return addressRepository.findById(addressToUpdateId).orElseThrow(() -> new RuntimeException("Address not found"));
+    private Optional<AddressEntity> returnAddressIfExists(Long addressToUpdateId) {
+        return addressRepository.findById(addressToUpdateId);
     }
 
-//    TODO
-//    public void deleteAddress(Long addressToDeleteId){
-//        addressRepository.delete(returnAddressIfExists(addressToDeleteId));
-//    }
+    @Transactional
+    public void deleteAddress(Long addressToDeleteId) {
+        addressRepository.deleteById(addressToDeleteId);
+        log.info("Address with ID: {} was deleted (if existed)", addressToDeleteId);
+    }
 }

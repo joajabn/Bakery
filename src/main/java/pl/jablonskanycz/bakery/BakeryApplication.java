@@ -37,8 +37,8 @@ public class BakeryApplication {
         addressService.updateAddress(1L, 16.90, 18.30);
         System.out.println(addressService.getAllAddresses());
         System.out.println("Delete address");
-//        addressService.deleteAddress(1L);
-//        System.out.println(addressService.getAllAddresses());
+        addressService.deleteAddress(4L);
+        System.out.println(addressService.getAllAddresses());
 
     }
 }
