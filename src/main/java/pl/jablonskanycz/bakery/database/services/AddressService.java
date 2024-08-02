@@ -45,13 +45,7 @@ public class AddressService {
 
     @Transactional
     public void deleteAddress(Long addressToDeleteId) {
-        Optional<AddressEntity> addressToDelete = returnAddressIfExists(addressToDeleteId);
-        if(addressToDelete.isPresent()){
-            log.info("Deleting address with ID: {}", addressToDeleteId);
-            addressRepository.delete(addressToDelete.get());
-            log.info("Address with ID: {} successfully deleted", addressToDeleteId);
-        } else {
-            log.warn("Address with ID: {} not found", addressToDeleteId);
-        }
+        addressRepository.deleteById(addressToDeleteId);
+        log.info("Address with ID: {} was deleted (if existed)", addressToDeleteId);
     }
 }
