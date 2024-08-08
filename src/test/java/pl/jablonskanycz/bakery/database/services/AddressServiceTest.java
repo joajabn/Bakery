@@ -1,9 +1,7 @@
 package pl.jablonskanycz.bakery.database.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,7 +12,6 @@ import pl.jablonskanycz.bakery.database.mapper.AddressMapper;
 import pl.jablonskanycz.bakery.database.models.AddressModel;
 import pl.jablonskanycz.bakery.database.repositories.AddressRepository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,22 +32,17 @@ class AddressServiceTest {
     @MockBean
     private AddressMapper addressMapper;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private final AddressEntity addressEntity1 = createAddressEntity(1L);
+    private final AddressEntity addressEntity2 = createAddressEntity(2L);
+    private final AddressModel addressModel1 = createAddressModel(1L);
+    private final AddressModel addressModel2 = createAddressModel(2L);
 
     @Test
     public void shouldReturnAllAddresses() {
         //given
-        AddressEntity address1 = AddressEntity.builder().addressId(1L).latitude(51.20).longitude(15.80).build();
-        AddressEntity address2 = AddressEntity.builder().addressId(2L).latitude(50.02).longitude(18.30).build();
-        when(addressRepository.findAll()).thenReturn(Arrays.asList(address1, address2));
-
-        AddressModel addressModel1 = AddressModel.builder().addressId(1L).latitude(51.20).longitude(15.80).build();
-        AddressModel addressModel2 = AddressModel.builder().addressId(2L).latitude(50.02).longitude(18.30).build();
-        when(addressMapper.map(address1)).thenReturn(addressModel1);
-        when(addressMapper.map(address2)).thenReturn(addressModel2);
+        when(addressRepository.findAll()).thenReturn(List.of(addressEntity1, addressEntity2));
+        when(addressMapper.map(addressEntity1)).thenReturn(addressModel1);
+        when(addressMapper.map(addressEntity2)).thenReturn(addressModel2);
 
         //when
         List<AddressModel> addresses = addressService.getAllAddresses();
@@ -60,22 +52,40 @@ class AddressServiceTest {
         assertEquals(2, addresses.size());
         assertEquals(addressModel1, addresses.get(0));
         assertEquals(addressModel2, addresses.get(1));
-//        assertEquals(address1.getAddressId(), addresses.get(0).getAddressId());
-//        assertEquals(address2.getAddressId(), addresses.getLast().getAddressId());
-//        assertEquals(address1.getLatitude(), addresses.getFirst().getLatitude());
-//        assertEquals(address2.getLatitude(), addresses.getLast().getLatitude());
-//        assertEquals(address1.getLongitude(), addresses.getFirst().getLongitude());
-//        assertEquals(address2.getLongitude(), addresses.getLast().getLongitude());
+    }
+
+    private static AddressModel createAddressModel(long addressId) {
+        return AddressModel.builder().addressId(addressId).latitude(51.20).longitude(15.80).build();
+    }
+
+    private static AddressEntity createAddressEntity(long addressId) {
+        return AddressEntity.builder().addressId(addressId).latitude(51.20).longitude(15.80).build();
     }
 
     @Test
-    public void shouldAddAddress() {
+    public void shouldFindAddressById(){
         //given
-        AddressEntity address = AddressEntity.builder().latitude(51.20).longitude(15.80).build();
-        when(addressRepository.save(any(AddressEntity.class))).thenReturn(address);
+        long addressId = 1L;
+        when(addressRepository.findById(addressId)).thenReturn(Optional.of(addressEntity1));
+        when(addressMapper.map(addressEntity1)).thenReturn(addressModel1);
 
         //when
-        addressService.addAddress(51.20, 15.80);
+        AddressModel addressFound = addressService.findAddressById(addressId);
+
+        //then
+        assertNotNull(addressFound);
+        assertEquals(addressModel1.getAddressId(), addressEntity1.getAddressId());
+        assertEquals(addressModel1.getLatitude(), addressEntity1.getLatitude());
+        assertEquals(addressModel1.getLongitude(), addressEntity1.getLongitude());
+    }
+    @Test
+    public void shouldAddAddress() {
+        //given
+        when(addressRepository.save(any(AddressEntity.class))).thenReturn(addressEntity1);
+        when(addressMapper.map(addressModel1)).thenReturn(addressEntity1);
+
+        //when
+        addressService.addAddress(addressModel1);
 
         //then
         verify(addressRepository).save(any(AddressEntity.class));
@@ -84,33 +94,30 @@ class AddressServiceTest {
     @Test
     public void shouldUpdateAddress() {
         //given
-        AddressModel addressModel = AddressModel.builder().addressId(1L).latitude(51.20).longitude(15.80).build();
-        AddressEntity addressEntity = AddressEntity.builder().addressId(1L).latitude(51.20).longitude(15.80).build();
-
-        when(addressMapper.map(addressModel)).thenReturn(addressEntity);
-        when(addressRepository.findById(1L)).thenReturn(Optional.of(addressEntity));
+        long addressId = 1L;
+        when(addressRepository.findById(addressId)).thenReturn(Optional.of(addressEntity1));
+        when(addressMapper.map(addressModel1)).thenReturn(addressEntity1);
 
         // when
-        addressService.updateAddress(addressModel, 52.83, 16.34);
+        addressService.updateAddress(addressModel1, 52.83, 16.34);
 
         // then
         verify(addressRepository).save(any(AddressEntity.class));
-        assertEquals(52.83, addressEntity.getLatitude());
-        assertEquals(16.34, addressEntity.getLongitude());
+        assertEquals(52.83, addressEntity1.getLatitude());
+        assertEquals(16.34, addressEntity1.getLongitude());
     }
 
 
     @Test
-    public void shouldNotUpdateNonExistentAddress() {
+    public void shouldIgnoreNonExistentAddress() {
         //given
-        AddressModel addressModel = AddressModel.builder().addressId(1L).latitude(51.20).longitude(15.80).build();
-        AddressEntity addressEntity = AddressEntity.builder().addressId(1L).latitude(51.20).longitude(15.80).build();
-        when(addressMapper.map(addressModel)).thenReturn(addressEntity);
-        when(addressRepository.findById(1L)).thenReturn(Optional.empty());
+        long addressId = 1L;
+        when(addressRepository.findById(addressId)).thenReturn(Optional.empty());
+        when(addressMapper.map(addressModel1)).thenReturn(addressEntity1);
 
         //when
         Exception exception = assertThrows(IllegalStateException.class, () -> {
-            addressService.updateAddress(addressModel, 52.83, 16.34);
+            addressService.updateAddress(addressModel1, 52.83, 16.34);
         });
 
         //then
@@ -121,17 +128,12 @@ class AddressServiceTest {
     @Test
     public void shouldDeleteAddress() {
         //given
-        AddressEntity addressEntity = AddressEntity.builder().addressId(1L).latitude(51.20).longitude(15.80).build();
-        AddressModel addressModel = AddressModel.builder().addressId(1L).latitude(51.20).longitude(15.80).build();
-
-        when(addressMapper.map(addressModel)).thenReturn(addressEntity);
-        when(addressRepository.findById(1L)).thenReturn(Optional.of(addressEntity));
-        doNothing().when(addressRepository).deleteById(1L);
+        long addressIdToDelete = 1L;
 
         //when
-        addressService.deleteAddress(addressModel);
+        addressService.deleteAddress(addressIdToDelete);
 
         //then
-        verify(addressRepository).deleteById(1L);
+        verify(addressRepository).deleteById(addressIdToDelete);
     }
 }

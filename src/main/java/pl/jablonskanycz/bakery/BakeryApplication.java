@@ -3,10 +3,8 @@ package pl.jablonskanycz.bakery;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import pl.jablonskanycz.bakery.database.repositories.AddressRepository;
-import pl.jablonskanycz.bakery.database.repositories.PersonRepository;
+import pl.jablonskanycz.bakery.database.models.AddressModel;
 import pl.jablonskanycz.bakery.database.services.AddressService;
-import pl.jablonskanycz.bakery.database.services.PersonService;
 
 @SpringBootApplication
 public class BakeryApplication {
@@ -31,14 +29,14 @@ public class BakeryApplication {
         System.out.println("Address service:");
         AddressService addressService = context.getBean(AddressService.class);
         System.out.println(addressService.getAllAddresses());
-        addressService.addAddress(15.46, 17.85);
+        AddressModel addressModel = AddressModel.builder().latitude(16.57).longitude(17.89).build();
+        addressService.addAddress(addressModel);
         System.out.println(addressService.getAllAddresses());
-        System.out.println("Update address:");
-        addressService.updateAddress(1L, 16.90, 18.30);
-        System.out.println(addressService.getAllAddresses());
-        System.out.println("Delete address");
-        addressService.deleteAddress(4L);
-        System.out.println(addressService.getAllAddresses());
+        System.out.println(addressService.findAddressById(5L));
+//        addressService.updateAddress(1L, 16.90, 18.30);
+//        System.out.println(addressService.getAllAddresses());
+//        addressService.deleteAddress(4L);
+//        System.out.println(addressService.getAllAddresses());
 
     }
 }

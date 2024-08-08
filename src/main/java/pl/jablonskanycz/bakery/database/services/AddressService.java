@@ -34,13 +34,26 @@ public class AddressService {
         return addresses;
     }
 
-    public void addAddress(Double latitude, Double longitude) {
-        addressRepository.save(AddressEntity.builder().latitude(latitude).longitude(longitude).build());
+    public AddressModel findAddressById(long addressId){
+        log.info("Getting address by ID: {}", addressId);
+        AddressModel addressModel = addressRepository.findById(addressId)
+                .map(addressMapper::map)
+                .orElseThrow(() -> {
+                    String message = "Address with given ID does not exist";
+                    log.error(message);
+                    throw new IllegalStateException(message);
+                });
+        log.info("Getting address by ID completed");
+        return addressModel;
+    }
+
+    public void addAddress(AddressModel addressModel) {
+        addressRepository.save(addressMapper.map(addressModel));
         log.info("Adding new address completed");
     }
 
     @Transactional
-    public void updateAddress(AddressModel addressModelToUpdate, Double latitude, Double longitude) {
+    public void updateAddress(AddressModel addressModelToUpdate, double latitude, double longitude) {
         log.info("Updating address with ID: {}", addressModelToUpdate.getAddressId());
         Optional<AddressEntity> addressToUpdate = returnAddressIfExists(addressMapper.map(addressModelToUpdate).getAddressId());
         if (addressToUpdate.isPresent()) {
@@ -56,14 +69,18 @@ public class AddressService {
         }
     }
 
-    private Optional<AddressEntity> returnAddressIfExists(Long addressToUpdateId) {
+    private Optional<AddressEntity> returnAddressIfExists(long addressToUpdateId) {
         return addressRepository.findById(addressToUpdateId);
     }
 
     @Transactional
-    public void deleteAddress(AddressModel addressModelToDelete) {
-        log.info("Deleting address with ID: {}", addressModelToDelete.getAddressId());
-        addressRepository.deleteById(addressMapper.map(addressModelToDelete).getAddressId());
-        log.info("Address with ID: {} was deleted (if existed)", addressModelToDelete);
+    public void deleteAddress(long addressIdToDelete) {
+        log.info("Deleting address with ID: {}", addressIdToDelete);
+        addressRepository.deleteById(addressIdToDelete);
+        log.info("Address with ID: {} was deleted (if existed)", addressIdToDelete);
     }
+
+//    TODO
+//    @Test
+//    public void shouldDeleteClientWhileDeletingAddress()
 }

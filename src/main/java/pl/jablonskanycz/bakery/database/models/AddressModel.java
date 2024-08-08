@@ -1,9 +1,6 @@
 package pl.jablonskanycz.bakery.database.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
@@ -13,4 +10,8 @@ public class AddressModel {
     private long addressId;
     private double latitude;
     private double longitude;
+    @Override
+    public String toString() {
+        return addressId + " , " + latitude + " , " + longitude + "\n";
+    }
 }
