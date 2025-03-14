@@ -12,6 +12,8 @@ services:
     build:
       context: ../
       dockerfile: infrastructure/bakery/application/Dockerfile
+    environment:
+      ENCRYPTOR_PASSWORD: ${ENCRYPTOR_PASSWORD}
     container_name: bakery-app-container
     ports:
       - 8080:8080
