@@ -4,7 +4,7 @@ services:
       context: bakery/database
     environment:
       POSTGRES_PASSWORD: ${PASSWORD}
-      POSTGRES_USER: ${USERNAME}
+      POSTGRES_USER: ${USERNAM}
     container_name: bakery-database-container
     ports:
       - 5555:5432
