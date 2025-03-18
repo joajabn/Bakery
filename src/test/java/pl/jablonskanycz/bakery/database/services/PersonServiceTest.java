@@ -2,7 +2,11 @@ package pl.jablonskanycz.bakery.database.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,30 +20,31 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) //test jednostkowy - wszystko co nie jest PersonService jest mockiem
 class PersonServiceTest {
-    @MockBean
+    @Mock
     private PersonRepository personRepository;
 
-    @Autowired
     private PersonService personService;
-
+    @Mock
     private PersonEntity personEntity;
+
+    @Mock
+    private PersonEntity personJanina;
 
     @BeforeEach
     void setup() {
-        personEntity = PersonEntity.builder()
-                .personId(1L)
-                .firstName("Jan")
-                .lastName("Kowalski")
-                .build();
+        MockitoAnnotations.openMocks(this);
+
+        when(personEntity.getPersonId()).thenReturn(1L);
+        when(personEntity.getFirstName()).thenReturn("Jan");
+        when(personEntity.getLastName()).thenReturn("Kowalski");
+
+        personService = new PersonService(personRepository);
     }
 
     @Test
@@ -59,17 +64,24 @@ class PersonServiceTest {
 
     @Test
     void testAddPerson() {
+        //given
+        when(personJanina.getFirstName()).thenReturn("Janina");
+        when(personJanina.getLastName()).thenReturn("Kowalska");
+
         //when
         personService.addPerson("Janina", "Kowalska");
 
         //then
-        verify(personRepository).save(any(PersonEntity.class));
+        verify(personRepository).save(eq(PersonEntity.builder().firstName("Janina").lastName("Kowalska").build()));
+//        verify(personRepository).save(eq(personJanina));
     }
 
     @Test
     void testUpdatePerson() {
         //given
         when(personRepository.findById(anyLong())).thenReturn(Optional.of(personEntity));
+        when(personEntity.getFirstName()).thenReturn("Janina");
+        when(personEntity.getLastName()).thenReturn("Kowalska");
 
         //when
         personService.updatePerson(1L, "Janina", "Kowalska");
@@ -77,7 +89,7 @@ class PersonServiceTest {
         //then
         assertEquals("Janina", personEntity.getFirstName());
         assertEquals("Kowalska", personEntity.getLastName());
-        verify(personRepository).save(any(PersonEntity.class));
+        verify(personRepository).save(eq(PersonEntity.builder().personId(1L).firstName("Janina").lastName("Kowalska").build()));
     }
 
     @Test
