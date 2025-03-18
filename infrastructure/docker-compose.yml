@@ -1,0 +1,21 @@
+services:
+  bakery-database:
+    build:
+      context: bakery/database
+    environment:
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_USER: ${USERNAM}
+    container_name: bakery-database-container
+    ports:
+      - 5555:5432
+  bakery-app:
+    build:
+      context: ../
+      dockerfile: infrastructure/bakery/application/Dockerfile
+    environment:
+      ENCRYPTOR_PASSWORD: ${ENCRYPTOR_PASSWORD}
+    container_name: bakery-app-container
+    ports:
+      - 8080:8080
+    depends_on:
+      - bakery-database
