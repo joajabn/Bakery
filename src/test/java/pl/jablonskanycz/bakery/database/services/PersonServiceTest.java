@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.jablonskanycz.bakery.database.domain.PersonEntity;
+import pl.jablonskanycz.bakery.database.exceptions.PersonNotFoundException;
 import pl.jablonskanycz.bakery.database.repositories.PersonRepository;
 
 import java.util.ArrayList;
@@ -89,7 +90,9 @@ class PersonServiceTest {
         //then
         assertEquals("Janina", personEntity.getFirstName());
         assertEquals("Kowalska", personEntity.getLastName());
-        verify(personRepository).save(eq(PersonEntity.builder().personId(1L).firstName("Janina").lastName("Kowalska").build()));
+        verify(personRepository).save(eq(personEntity));
+        verify(personEntity).setFirstName("Janina");
+        verify(personEntity).setLastName("Kowalska");
     }
 
     @Test
@@ -98,7 +101,7 @@ class PersonServiceTest {
         when(personRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //when then
-        assertThrows(RuntimeException.class, () -> personService.updatePerson(1L, "Janina", "Kowalska"));
+        assertThrows(PersonNotFoundException.class, () -> personService.updatePerson(1L, "Janina", "Kowalska"));
     }
 
     @Test
@@ -110,7 +113,7 @@ class PersonServiceTest {
         personService.deletePerson(1L);
 
         //then
-        verify(personRepository).delete(any(PersonEntity.class));
+        verify(personRepository).delete(eq(personEntity));
     }
 
     @Test
@@ -119,6 +122,6 @@ class PersonServiceTest {
         when(personRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //when then
-        assertThrows(RuntimeException.class, () -> personService.deletePerson(1L));
+        assertThrows(PersonNotFoundException.class, () -> personService.deletePerson(1L));
     }
 }

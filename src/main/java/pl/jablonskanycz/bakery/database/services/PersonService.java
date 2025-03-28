@@ -2,14 +2,18 @@ package pl.jablonskanycz.bakery.database.services;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.jablonskanycz.bakery.database.domain.PersonEntity;
+import pl.jablonskanycz.bakery.database.exceptions.PersonNotFoundException;
 import pl.jablonskanycz.bakery.database.repositories.PersonRepository;
+
 import java.util.List;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class PersonService {
 
     @Autowired
@@ -32,10 +36,13 @@ public class PersonService {
     }
 
     private PersonEntity returnPersonIfExists(Long personToUpdateId) {
-        return personRepository.findById(personToUpdateId).orElseThrow(() -> new RuntimeException("Person not found"));
+        return personRepository.findById(personToUpdateId).orElseThrow(() -> {
+            log.warn("Person not found");
+            return new PersonNotFoundException("Person not found");
+        });
     }
 
-    public void deletePerson(Long personToDeleteId){
+    public void deletePerson(Long personToDeleteId) {
         personRepository.delete(returnPersonIfExists(personToDeleteId));
     }
 }

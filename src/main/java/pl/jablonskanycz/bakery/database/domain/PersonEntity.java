@@ -26,10 +26,10 @@ public class PersonEntity {
     @Column(name = "last_name")
     private String lastName;
 
-//    @Override
-//    public String toString() {
-//        return personId + " , " + firstName + " , " + lastName + "\n";
-//    }
+    @Override
+    public String toString() {
+        return personId + " , " + firstName + " , " + lastName + "\n";
+    }
 
     @Override
     public boolean equals(Object o) {
