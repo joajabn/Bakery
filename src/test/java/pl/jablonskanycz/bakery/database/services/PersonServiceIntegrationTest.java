@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
+import static pl.jablonskanycz.bakery.database.services.PersonServiceTest.ANY_FIRSTNAME1;
+import static pl.jablonskanycz.bakery.database.services.PersonServiceTest.ANY_LASTNAME1;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -38,10 +40,10 @@ public class PersonServiceIntegrationTest {
         //given
         List<PersonModel> allPeopleBefore = personService.getAllPeople();
         Optional<PersonModel> personModelBefore = allPeopleBefore.stream()
-                .filter(person -> "Joanna".equals(person.getFirstName()) && "Testowa".equals(person.getLastName()))
+                .filter(person -> ANY_FIRSTNAME1.equals(person.getFirstName()) && ANY_LASTNAME1.equals(person.getLastName()))
                 .findAny();
         Assertions.assertTrue(personModelBefore.isEmpty());
-        PersonModel personToAdd = PersonModel.builder().firstName("Joanna").lastName("Testowa").build();
+        PersonModel personToAdd = PersonModel.builder().firstName(ANY_FIRSTNAME1).lastName(ANY_LASTNAME1).build();
 
         //when
         personService.addPerson(personToAdd);
@@ -62,7 +64,7 @@ public class PersonServiceIntegrationTest {
 
         //#3 -> anyMatch
         boolean personExists = allPeople.stream()
-                .anyMatch(person -> "Joanna".equals(person.getFirstName()) && "Testowa".equals(person.getLastName()));
+                .anyMatch(person -> ANY_FIRSTNAME1.equals(person.getFirstName()) && ANY_LASTNAME1.equals(person.getLastName()));
         Assertions.assertTrue(personExists);
     }
 }

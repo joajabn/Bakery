@@ -33,6 +33,8 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) //test jednostkowy - wszystko co nie jest PersonService jest mockiem
 class PersonServiceTest {
     public static final long PERSON_ENTITY_ID1 = 1L;
+    public static final String ANY_FIRSTNAME1 = "Jan";
+    public static final String ANY_LASTNAME1 = "Kowalski";
     private PersonService personService;
     @Mock
     private PersonRepository personRepository;
@@ -50,12 +52,12 @@ class PersonServiceTest {
         MockitoAnnotations.openMocks(this);
 
         when(personEntity.getPersonId()).thenReturn(PERSON_ENTITY_ID1);
-        when(personEntity.getFirstName()).thenReturn("Jan");
-        when(personEntity.getLastName()).thenReturn("Kowalski");
+        when(personEntity.getFirstName()).thenReturn(ANY_FIRSTNAME1);
+        when(personEntity.getLastName()).thenReturn(ANY_LASTNAME1);
 
         when(personModel.getPersonId()).thenReturn(PERSON_ENTITY_ID1);
-        when(personModel.getFirstName()).thenReturn("Jan");
-        when(personModel.getLastName()).thenReturn("Kowalski");
+        when(personModel.getFirstName()).thenReturn(ANY_FIRSTNAME1);
+        when(personModel.getLastName()).thenReturn(ANY_LASTNAME1);
 
         when(personMapper.map(personEntity)).thenReturn(personModel);
         when(personMapper.map(personModel)).thenReturn(personEntity);
