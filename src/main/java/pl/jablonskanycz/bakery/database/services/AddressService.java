@@ -6,12 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.jablonskanycz.bakery.database.domain.AddressEntity;
+import pl.jablonskanycz.bakery.database.exceptions.AddressNotFoundException;
 import pl.jablonskanycz.bakery.database.mapper.AddressMapper;
 import pl.jablonskanycz.bakery.database.models.AddressModel;
 import pl.jablonskanycz.bakery.database.repositories.AddressRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -26,22 +26,22 @@ public class AddressService {
     private AddressMapper addressMapper;
 
     public List<AddressModel> getAllAddresses() {
-        log.info("Getting all users...");
+        log.info("Getting all addresses");
         List<AddressModel> addresses = addressRepository.findAll().stream()
                 .map(addressMapper::map)
                 .collect(Collectors.toList());
-        log.info("Getting all users completed");
+        log.info("Getting all addresses completed");
         return addresses;
     }
 
-    public AddressModel findAddressById(long addressId){
+    public AddressModel findAddressById(long addressId) {
         log.info("Getting address by ID: {}", addressId);
         AddressModel addressModel = addressRepository.findById(addressId)
                 .map(addressMapper::map)
                 .orElseThrow(() -> {
                     String message = "Address with given ID does not exist";
                     log.error(message);
-                    throw new IllegalStateException(message);
+                    throw new AddressNotFoundException(message);
                 });
         log.info("Getting address by ID completed");
         return addressModel;
@@ -55,22 +55,20 @@ public class AddressService {
     @Transactional
     public void updateAddress(AddressModel addressModelToUpdate, double latitude, double longitude) {
         log.info("Updating address with ID: {}", addressModelToUpdate.getAddressId());
-        Optional<AddressEntity> addressToUpdate = returnAddressIfExists(addressMapper.map(addressModelToUpdate).getAddressId());
-        if (addressToUpdate.isPresent()) {
-            AddressEntity address = addressToUpdate.get();
-            address.setLatitude(latitude);
-            address.setLongitude(longitude);
-            addressRepository.save(address);
-            log.info("Updating address completed");
-        } else {
-            String message = "Given address does not exist";
-            log.error(message);
-            throw new IllegalStateException(message);
-        }
+        AddressEntity addressToUpdate = returnAddressIfExists(addressMapper.map(addressModelToUpdate).getAddressId());
+        addressToUpdate.setLatitude(latitude);
+        addressToUpdate.setLongitude(longitude);
+        addressRepository.save(addressToUpdate);
+        log.info("Updating address completed");
+
     }
 
-    private Optional<AddressEntity> returnAddressIfExists(long addressToUpdateId) {
-        return addressRepository.findById(addressToUpdateId);
+    private AddressEntity returnAddressIfExists(long addressToUpdateId) {
+        return addressRepository.findById(addressToUpdateId).orElseThrow(() -> {
+            String message = "Address not found";
+            log.warn(message);
+            return new AddressNotFoundException(message);
+        });
     }
 
     @Transactional
