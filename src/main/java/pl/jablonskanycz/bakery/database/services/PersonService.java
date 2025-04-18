@@ -50,9 +50,9 @@ public class PersonService {
     }
 
     @Transactional
-    public PersonModel updatePerson(PersonModel personModelToUpdate, String firstName, String lastName) {
-        log.info("Updating person with ID: {}", personModelToUpdate.getPersonId());
-        PersonEntity personToUpdate = returnPersonIfExists(personModelToUpdate.getPersonId());
+    public PersonModel updatePerson(long personModelToUpdateId, String firstName, String lastName) {
+        log.info("Updating person with ID: {}", personModelToUpdateId);
+        PersonEntity personToUpdate = returnPersonIfExists(personModelToUpdateId);
         PersonEntity built = personToUpdate.toBuilder().firstName(firstName).lastName(lastName).build();
         PersonEntity updated = personRepository.save(built);
         log.info("Updating person completed");

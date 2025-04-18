@@ -67,4 +67,19 @@ public class PersonServiceIntegrationTest {
                 .anyMatch(person -> ANY_FIRSTNAME1.equals(person.getFirstName()) && ANY_LASTNAME1.equals(person.getLastName()));
         Assertions.assertTrue(personExists);
     }
+
+    @Test
+    public void shouldUpdatePerson() {
+        //given
+
+        //when
+        PersonModel personModelUpdated = personService.updatePerson(1L, "Katarzyna", "PonownieTestowa");
+
+        //then
+        Assertions.assertEquals("Katarzyna", personModelUpdated.getFirstName());
+        Assertions.assertEquals("PonownieTestowa", personModelUpdated.getLastName());
+        PersonModel personUpdated = personService.findById(1L);
+        Assertions.assertEquals("Katarzyna", personUpdated.getFirstName());
+        Assertions.assertEquals("PonownieTestowa", personUpdated.getLastName());
+    }
 }

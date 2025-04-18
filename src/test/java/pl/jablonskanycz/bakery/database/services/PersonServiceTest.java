@@ -115,7 +115,7 @@ class PersonServiceTest {
         when(personRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //when then
-        assertThrows(PersonNotFoundException.class, () -> personService.updatePerson(personModel, "Janina", "Kowalska"));
+        assertThrows(PersonNotFoundException.class, () -> personService.updatePerson(1L, "Janina", "Kowalska"));
     }
 
     @Test
