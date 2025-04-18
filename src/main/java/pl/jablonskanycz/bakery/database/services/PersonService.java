@@ -43,6 +43,7 @@ public class PersonService {
         return personModel;
     }
 
+    @Transactional
     public long addPerson(PersonModel personModel) {
         PersonEntity saved = personRepository.save(personMapper.map(personModel));
         log.info("Adding new person completed");

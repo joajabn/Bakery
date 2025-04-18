@@ -3,9 +3,11 @@ package pl.jablonskanycz.bakery.database.services;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.jablonskanycz.bakery.database.domain.PersonEntity;
@@ -23,6 +25,8 @@ import static pl.jablonskanycz.bakery.database.services.PersonServiceTest.ANY_LA
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @SpringBootTest
+@DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class PersonServiceIntegrationTest {
     private PersonService personService;
     @Autowired
@@ -39,17 +43,21 @@ public class PersonServiceIntegrationTest {
     public void shouldAddPerson() {
         //given
         List<PersonModel> allPeopleBefore = personService.getAllPeople();
-        Optional<PersonModel> personModelBefore = allPeopleBefore.stream()
+        long countPersonModelBefore = allPeopleBefore.stream()
                 .filter(person -> ANY_FIRSTNAME1.equals(person.getFirstName()) && ANY_LASTNAME1.equals(person.getLastName()))
-                .findAny();
-        Assertions.assertTrue(personModelBefore.isEmpty());
+                .count();
         PersonModel personToAdd = PersonModel.builder().firstName(ANY_FIRSTNAME1).lastName(ANY_LASTNAME1).build();
+
 
         //when
         personService.addPerson(personToAdd);
 
         //then
-        List<PersonModel> allPeople = personService.getAllPeople();
+        long countPersonModelAfter = personService.getAllPeople().stream()
+                .filter(person -> ANY_FIRSTNAME1.equals(person.getFirstName()) && ANY_LASTNAME1.equals(person.getLastName()))
+                .count();
+
+        Assertions.assertEquals(countPersonModelBefore + 1, countPersonModelAfter);
 
 //        #1 -> count
 //        long counted = allPeople.stream()
@@ -63,9 +71,9 @@ public class PersonServiceIntegrationTest {
 //        Assertions.assertTrue(personEntityAfter.isPresent());
 
         //#3 -> anyMatch
-        boolean personExists = allPeople.stream()
-                .anyMatch(person -> ANY_FIRSTNAME1.equals(person.getFirstName()) && ANY_LASTNAME1.equals(person.getLastName()));
-        Assertions.assertTrue(personExists);
+//        boolean personExists = allPeople.stream()
+//                .anyMatch(person -> ANY_FIRSTNAME1.equals(person.getFirstName()) && ANY_LASTNAME1.equals(person.getLastName()));
+//        Assertions.assertTrue(personExists);
     }
 
     @Test

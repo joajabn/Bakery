@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.jablonskanycz.bakery.database.domain.AddressEntity;
+import pl.jablonskanycz.bakery.database.exceptions.AddressNotFoundException;
 import pl.jablonskanycz.bakery.database.mapper.AddressMapper;
 import pl.jablonskanycz.bakery.database.models.AddressModel;
 import pl.jablonskanycz.bakery.database.repositories.AddressRepository;
@@ -116,12 +117,12 @@ class AddressServiceTest {
         when(addressMapper.map(addressModel1)).thenReturn(addressEntity1);
 
         //when
-        Exception exception = assertThrows(IllegalStateException.class, () -> {
+        Exception exception = assertThrows(AddressNotFoundException.class, () -> {
             addressService.updateAddress(addressModel1, 52.83, 16.34);
         });
 
         //then
-        assertEquals("Given address does not exist", exception.getMessage());
+        assertEquals("Address not found", exception.getMessage());
 
     }
 
