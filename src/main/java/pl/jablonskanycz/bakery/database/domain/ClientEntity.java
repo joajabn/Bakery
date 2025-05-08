@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 public class ClientEntity {
 
     @Id

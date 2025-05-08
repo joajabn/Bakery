@@ -38,7 +38,7 @@ public class PersonService {
         log.info("Getting person with ID: {}", personId);
         PersonModel personModel = personRepository.findById(personId)
                 .map(personMapper::map)
-                .orElseThrow(handlePersonNotFound("Client with given ID does not exist"));
+                .orElseThrow(handlePersonNotFound("Person with given ID does not exist"));
         log.info("Getting person with given ID completed");
         return personModel;
     }
@@ -74,6 +74,6 @@ public class PersonService {
     public void deletePerson(long personToDeleteId) {
         log.info("Deleting person with ID: {}", personToDeleteId);
         personRepository.delete(returnPersonIfExists(personToDeleteId));
-        log.info("Client with ID: {} was deleted successfully", personToDeleteId);
+        log.info("Person with ID: {} was deleted successfully", personToDeleteId);
     }
 }

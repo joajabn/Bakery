@@ -9,3 +9,7 @@ Insert into person (first_name, last_name) values
 ('Joanna', 'Testowa'),
 ('Jan', 'Kowalski'),
 ('Adam', 'Nowak');
+Insert into clients (person_id, address_id) values
+(1, 1),
+(2, 2),
+(3, 3);
