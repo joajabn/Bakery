@@ -1,5 +1,6 @@
 package pl.jablonskanycz.bakery.database.mapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.jablonskanycz.bakery.database.domain.ClientEntity;
 import pl.jablonskanycz.bakery.database.models.ClientModel;
@@ -7,7 +8,9 @@ import pl.jablonskanycz.bakery.database.models.ClientModel;
 
 @Component
 public class ClientMapper {
+    @Autowired
     private PersonMapper personMapper;
+    @Autowired
     private AddressMapper addressMapper;
     public ClientModel map(ClientEntity clientEntity){
         if (clientEntity == null){

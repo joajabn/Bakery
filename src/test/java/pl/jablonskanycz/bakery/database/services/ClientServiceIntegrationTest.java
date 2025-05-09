@@ -1,5 +1,6 @@
 package pl.jablonskanycz.bakery.database.services;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,7 +13,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.jablonskanycz.bakery.database.mapper.AddressMapper;
 import pl.jablonskanycz.bakery.database.mapper.ClientMapper;
 import pl.jablonskanycz.bakery.database.mapper.PersonMapper;
+import pl.jablonskanycz.bakery.database.models.AddressModel;
 import pl.jablonskanycz.bakery.database.models.ClientModel;
+import pl.jablonskanycz.bakery.database.models.PersonModel;
 import pl.jablonskanycz.bakery.database.repositories.ClientRepository;
 
 import java.util.List;
@@ -37,6 +40,17 @@ public class ClientServiceIntegrationTest {
     @Autowired
     private AddressMapper addressMapper;
 
+    private final PersonModel personModel = getPersonModel();
+    private final AddressModel addressModel = getAddressModel();
+
+    private static PersonModel getPersonModel() {
+        return PersonModel.builder().firstName("Adam").lastName("Nowak").build();
+    }
+
+    private static AddressModel getAddressModel() {
+        return AddressModel.builder().latitude(50.45).longitude(16.73).build();
+    }
+
     @BeforeEach
     void setUp() {
         clientService = new ClientService(clientRepository, clientMapper, personMapper, addressMapper);
@@ -46,9 +60,16 @@ public class ClientServiceIntegrationTest {
     public void shouldAddClient() {
         //given
         List<ClientModel> allClientsBefore = clientService.getAllClients();
+        ClientModel clientToAdd = ClientModel.builder().person(personModel).address(addressModel).build();
 
         //when
+        long newClientId = clientService.addClient(clientToAdd);
+
         //then
+        Assertions.assertTrue(newClientId > 0);
+
+        //porównać id
     }
+
 }
 
