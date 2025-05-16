@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.jablonskanycz.bakery.database.domain.AddressEntity;
 import pl.jablonskanycz.bakery.database.domain.ClientEntity;
+import pl.jablonskanycz.bakery.database.domain.PersonEntity;
 import pl.jablonskanycz.bakery.database.exceptions.ClientNotFoundException;
 import pl.jablonskanycz.bakery.database.mapper.AddressMapper;
 import pl.jablonskanycz.bakery.database.mapper.ClientMapper;
@@ -62,7 +64,20 @@ public class ClientService {
     public ClientModel updateClient(long clientToUpdateId, PersonModel personModelToUpdate, AddressModel addressModelToUpdate){
         log.info("Updating client with ID: {}", clientToUpdateId);
         ClientEntity clientToUpdate = returnClientIfExists(clientToUpdateId);
-        ClientEntity built = clientToUpdate.toBuilder().person(personMapper.map(personModelToUpdate)).address(addressMapper.map(addressModelToUpdate)).build();
+        PersonEntity updatedPerson = clientToUpdate.getPerson().toBuilder()
+                .personId(clientToUpdate.getPerson().getPersonId())
+                .firstName(personModelToUpdate.getFirstName())
+                .lastName(personModelToUpdate.getLastName())
+                .build();
+        AddressEntity updateAddress = clientToUpdate.getAddress().toBuilder()
+                .addressId(clientToUpdate.getAddress().getAddressId())
+                .latitude(addressModelToUpdate.getLatitude())
+                .longitude(addressModelToUpdate.getLongitude())
+                .build();
+        ClientEntity built = clientToUpdate.toBuilder()
+                .person(updatedPerson)
+                .address(updateAddress)
+                .build();
         ClientEntity updated = clientRepository.save(built);
         log.info("Updating client completed");
         return clientMapper.map(updated);
@@ -71,7 +86,7 @@ public class ClientService {
     private static Supplier<ClientNotFoundException> handleClientNotFound(String message) {
         return () -> {
             log.warn(message);
-            throw new ClientNotFoundException(message);
+            return new ClientNotFoundException(message);
         };
     }
 

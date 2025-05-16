@@ -19,7 +19,7 @@ public class ClientEntity {
     private Long clientId;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonEntity person;
 
     @OneToOne(cascade = CascadeType.ALL)

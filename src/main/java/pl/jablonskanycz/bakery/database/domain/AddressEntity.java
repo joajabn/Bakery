@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 public class AddressEntity {
     @Id
     @SequenceGenerator(name = "address_seq", sequenceName = "address_seq", allocationSize = 1)
