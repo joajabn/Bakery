@@ -41,7 +41,7 @@ public class ClientService {
                 .map(clientMapper::map)
                 .collect(Collectors.toList());
         log.info("Getting all clients completed");
-        return  allClients;
+        return allClients;
     }
 
     public ClientModel findById(long clientId) {
@@ -61,26 +61,16 @@ public class ClientService {
     }
 
     @Transactional
-    public ClientModel updateClient(long clientToUpdateId, PersonModel personModelToUpdate, AddressModel addressModelToUpdate){
+    public ClientModel updateClient(long clientToUpdateId, PersonModel personModelToUpdate, AddressModel addressModelToUpdate) {
         log.info("Updating client with ID: {}", clientToUpdateId);
         ClientEntity clientToUpdate = returnClientIfExists(clientToUpdateId);
-        PersonEntity updatedPerson = clientToUpdate.getPerson().toBuilder()
-                .personId(clientToUpdate.getPerson().getPersonId())
-                .firstName(personModelToUpdate.getFirstName())
-                .lastName(personModelToUpdate.getLastName())
-                .build();
-        AddressEntity updateAddress = clientToUpdate.getAddress().toBuilder()
-                .addressId(clientToUpdate.getAddress().getAddressId())
-                .latitude(addressModelToUpdate.getLatitude())
-                .longitude(addressModelToUpdate.getLongitude())
-                .build();
-        ClientEntity built = clientToUpdate.toBuilder()
-                .person(updatedPerson)
-                .address(updateAddress)
-                .build();
-        ClientEntity updated = clientRepository.save(built);
+        clientToUpdate.getPerson().setFirstName(personModelToUpdate.getFirstName());
+        clientToUpdate.getPerson().setLastName(personModelToUpdate.getLastName());
+        clientToUpdate.getAddress().setLatitude(addressModelToUpdate.getLatitude());
+        clientToUpdate.getAddress().setLongitude(addressModelToUpdate.getLongitude());
+//        ClientEntity updated = clientRepository.save(clientToUpdate); -> settery generuja inserty pod spodem!
         log.info("Updating client completed");
-        return clientMapper.map(updated);
+        return clientMapper.map(clientToUpdate);
     }
 
     private static Supplier<ClientNotFoundException> handleClientNotFound(String message) {

@@ -30,8 +30,8 @@ public class ClientController {
     }
     //TODO ClientDTO!
     @PostMapping
-    public ResponseEntity<Long> addClient(@RequestBody ClientModel clientModel) {
-        long clientId = clientService.addClient(clientModel);
+    public ResponseEntity<Long> addClient(@RequestBody ClientModel clientToAdd) {
+        long clientId = clientService.addClient(clientToAdd);
         return new ResponseEntity<>(clientId, HttpStatus.CREATED);
     }
 
