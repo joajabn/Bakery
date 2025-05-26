@@ -12,15 +12,21 @@ public class AddressMapper {
         if (addressEntity == null){
             return null;
         }
-        AddressModel addressModel = new AddressModel();
-        return addressModel.builder().addressId(addressEntity.getAddressId()).latitude(addressEntity.getLatitude()).longitude(addressEntity.getLongitude()).build();
+        return AddressModel.builder()
+                .addressId(addressEntity.getAddressId())
+                .latitude(addressEntity.getLatitude())
+                .longitude(addressEntity.getLongitude())
+                .build();
     }
 
     public AddressEntity map(AddressModel addressModel){
         if (addressModel == null){
             return null;
         }
-        AddressEntity addressEntity = new AddressEntity();
-        return addressEntity.builder().addressId(addressModel.getAddressId()).latitude(addressModel.getLatitude()).longitude(addressModel.getLongitude()).build();
+        return AddressEntity.builder()
+//                .addressId(addressModel.getAddressId())
+                .latitude(addressModel.getLatitude())
+                .longitude(addressModel.getLongitude())
+                .build();
     }
 }

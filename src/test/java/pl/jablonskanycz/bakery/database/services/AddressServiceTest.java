@@ -1,13 +1,19 @@
 package pl.jablonskanycz.bakery.database.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pl.jablonskanycz.bakery.database.domain.AddressEntity;
+import pl.jablonskanycz.bakery.database.exceptions.AddressNotFoundException;
 import pl.jablonskanycz.bakery.database.mapper.AddressMapper;
 import pl.jablonskanycz.bakery.database.models.AddressModel;
 import pl.jablonskanycz.bakery.database.repositories.AddressRepository;
@@ -22,14 +28,16 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AddressServiceTest {
-    @Autowired
+
     private AddressService addressService;
 
-    @MockBean
+    @Mock
     private AddressRepository addressRepository;
 
-    @MockBean
+    @Mock
     private AddressMapper addressMapper;
 
     private final AddressEntity addressEntity1 = createAddressEntity(1L);
@@ -60,6 +68,12 @@ class AddressServiceTest {
 
     private static AddressEntity createAddressEntity(long addressId) {
         return AddressEntity.builder().addressId(addressId).latitude(51.20).longitude(15.80).build();
+    }
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+        addressService = new AddressService(addressRepository, addressMapper);
+
     }
 
     @Test
@@ -116,12 +130,12 @@ class AddressServiceTest {
         when(addressMapper.map(addressModel1)).thenReturn(addressEntity1);
 
         //when
-        Exception exception = assertThrows(IllegalStateException.class, () -> {
+        Exception exception = assertThrows(AddressNotFoundException.class, () -> {
             addressService.updateAddress(addressModel1, 52.83, 16.34);
         });
 
         //then
-        assertEquals("Given address does not exist", exception.getMessage());
+        assertEquals("Address not found", exception.getMessage());
 
     }
 

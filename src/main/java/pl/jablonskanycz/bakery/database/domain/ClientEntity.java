@@ -9,17 +9,17 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 public class ClientEntity {
 
     @Id
-    @SequenceGenerator(name = "clients_seq", sequenceName = "clients_seq", allocationSize = 1)
+    @SequenceGenerator(name = "client_seq", sequenceName = "client_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
     @Column(name = "client_id")
     private Long clientId;
 
-    @OneToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private PersonEntity person;
 
     @OneToOne(cascade = CascadeType.ALL)

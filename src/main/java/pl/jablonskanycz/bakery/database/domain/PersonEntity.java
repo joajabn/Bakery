@@ -3,13 +3,15 @@ package pl.jablonskanycz.bakery.database.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "person")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 public class PersonEntity {
 
     @Id
@@ -27,5 +29,18 @@ public class PersonEntity {
     @Override
     public String toString() {
         return personId + " , " + firstName + " , " + lastName + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonEntity person = (PersonEntity) o;
+        return Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName);
     }
 }
