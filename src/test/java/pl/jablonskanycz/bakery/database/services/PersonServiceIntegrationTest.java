@@ -39,7 +39,7 @@ public class PersonServiceIntegrationTest {
         personService = new PersonService(personRepository, personMapper);
     }
 
-    //@Test
+    @Test
     public void shouldAddPerson() {
         //given
         List<PersonModel> allPeopleBefore = personService.getAllPeople();
@@ -76,7 +76,7 @@ public class PersonServiceIntegrationTest {
 //        Assertions.assertTrue(personExists);
     }
 
-    //@Test
+    @Test
     public void shouldUpdatePerson() {
         //given
 

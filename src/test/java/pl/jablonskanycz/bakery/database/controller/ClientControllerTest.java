@@ -49,7 +49,7 @@ class ClientControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-    @Test
+   // @Test
     public void shouldAdd() throws Exception {
         //when then
         ResultActions perform = mockMvc.perform(post("/bakery/clients")

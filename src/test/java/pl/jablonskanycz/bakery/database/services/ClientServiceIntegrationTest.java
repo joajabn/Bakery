@@ -56,7 +56,7 @@ public class ClientServiceIntegrationTest {
         clientService = new ClientService(clientRepository, clientMapper, personMapper, addressMapper);
     }
 
-   // @Test
+    @Test
     public void shouldAddClient() {
         //given
         List<ClientModel> allClientsBefore = clientService.getAllClients();
