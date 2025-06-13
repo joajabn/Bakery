@@ -55,7 +55,5 @@ class ClientControllerTest {
                 .content(REQUEST_NEW_CLIENT));
         perform.andExpect(status().isCreated())
                 .andExpect(jsonPath(".clientId").value(4));
-
-
     }
 }
