@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
-@DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
 class ClientControllerTest {
     public static final String REQUEST_NEW_CLIENT = """
@@ -49,7 +49,7 @@ class ClientControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-   // @Test
+    @Test
     public void shouldAdd() throws Exception {
         //when then
         ResultActions perform = mockMvc.perform(post("/bakery/clients")
