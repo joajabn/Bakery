@@ -1,8 +1,8 @@
-create sequence public.person_seq;
+create sequence person_seq;
 alter sequence person_seq restart with 4;
-create sequence public.address_seq;
+create sequence address_seq;
 alter sequence address_seq restart with 5;
-create sequence public.client_seq;
+create sequence client_seq;
 alter sequence client_seq restart with 4;
 Insert into address (latitude, longitude) values
 (51.20, 15.80),

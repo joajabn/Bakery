@@ -58,4 +58,12 @@ class ClientControllerTest {
         perform.andExpect(status().isCreated())
                 .andExpect(jsonPath(".clientId").value(4));
     }
+
+    // TODO I needed to write this test so that the annotations would be already compliant with your next test!
+    // so feel free to implement missing tests inside of this below method and add more tests :)
+  @Test
+  public void yourNexTest() throws Exception {
+    //when then
+
+  }
 }
