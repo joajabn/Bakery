@@ -54,10 +54,10 @@ public class ClientService {
     }
 
     @Transactional
-    public long addClient(ClientModel clientModel) {
+    public ClientModel addClient(ClientModel clientModel) {
         ClientEntity saved = clientRepository.save(clientMapper.map(clientModel));
         log.info("Adding new client completed");
-        return saved.getClientId();
+        return clientMapper.map(saved);
     }
 
     @Transactional

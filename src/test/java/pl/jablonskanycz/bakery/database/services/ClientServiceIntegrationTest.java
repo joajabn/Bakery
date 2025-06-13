@@ -63,12 +63,12 @@ public class ClientServiceIntegrationTest {
         ClientModel clientToAdd = ClientModel.builder().person(personModel).address(addressModel).build();
 
         //when
-        long newClientId = clientService.addClient(clientToAdd);
+        ClientModel newClient = clientService.addClient(clientToAdd);
 
         //then
-        Assertions.assertTrue(newClientId > 0);
+        Assertions.assertTrue(newClient.getClientId() > 0);
 
-        //porównać id
+
     }
 
 }
