@@ -74,8 +74,6 @@ class ClientControllerTest {
                 .andExpect(jsonPath(".clientId").value(4));
     }
 
-    // TODO I needed to write this test so that the annotations would be already compliant with your next test!
-    // so feel free to implement missing tests inside of this below method and add more tests :)
     @Test
     public void shouldGetAllClients() throws Exception {
         //when then
@@ -83,8 +81,8 @@ class ClientControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].clientId").value(1))
-                .andExpect(jsonPath("$[1].clientId").value(1))
-                .andExpect(jsonPath("$[2].clientId").value(1));
+                .andExpect(jsonPath("$[1].clientId").value(2))
+                .andExpect(jsonPath("$[2].clientId").value(3));
 
     }
 
