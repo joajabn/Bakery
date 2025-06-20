@@ -2,7 +2,6 @@ package pl.jablonskanycz.bakery.database.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,12 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ActiveProfiles("test")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AddressServiceTest {
-
     private AddressService addressService;
 
     @Mock
@@ -44,6 +38,12 @@ class AddressServiceTest {
     private final AddressEntity addressEntity2 = createAddressEntity(2L);
     private final AddressModel addressModel1 = createAddressModel(1L);
     private final AddressModel addressModel2 = createAddressModel(2L);
+
+    @BeforeEach
+    public void setUp(){
+        MockitoAnnotations.openMocks(this);
+        addressService = new AddressService(addressRepository, addressMapper);
+    }
 
     @Test
     public void shouldReturnAllAddresses() {
@@ -68,12 +68,6 @@ class AddressServiceTest {
 
     private static AddressEntity createAddressEntity(long addressId) {
         return AddressEntity.builder().addressId(addressId).latitude(51.20).longitude(15.80).build();
-    }
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-        addressService = new AddressService(addressRepository, addressMapper);
-
     }
 
     @Test

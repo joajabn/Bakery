@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS) //test jednostkowy - wszystko co nie jest PersonService jest mockiem
+//test jednostkowy - wszystko co nie jest PersonService jest mockiem
 class PersonServiceTest {
     public static final long PERSON_ENTITY_ID1 = 1L;
     public static final String ANY_FIRSTNAME1 = "Jan";
