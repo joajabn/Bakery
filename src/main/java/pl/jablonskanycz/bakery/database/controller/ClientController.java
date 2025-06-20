@@ -7,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.jablonskanycz.bakery.database.dto.ClientDTO;
 import pl.jablonskanycz.bakery.database.exceptions.ClientNotFoundException;
-import pl.jablonskanycz.bakery.database.models.AddressModel;
 import pl.jablonskanycz.bakery.database.models.ClientModel;
-import pl.jablonskanycz.bakery.database.models.PersonModel;
 import pl.jablonskanycz.bakery.database.services.ClientService;
 
 import java.net.URI;
@@ -43,9 +41,9 @@ public class ClientController {
                 .body(newClient);
     }
 
-    @PutMapping
-    public ResponseEntity<ClientModel> updateClient(@RequestBody ClientDTO clientToUpdate) {
-        ClientModel updatedClient = clientService.updateClient(clientToUpdate.getClientId(), clientToUpdate.getPersonModel(), clientToUpdate.getAddressModel());
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientModel> updateClient(@PathVariable("id") long clientIdToUpdate, @RequestBody ClientDTO clientToUpdate) {
+        ClientModel updatedClient = clientService.updateClient(clientIdToUpdate, clientToUpdate.getPerson(), clientToUpdate.getAddress());
         return new ResponseEntity<>(updatedClient, HttpStatus.OK);
     }
 

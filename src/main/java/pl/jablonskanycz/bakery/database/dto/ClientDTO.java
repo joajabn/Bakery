@@ -6,16 +6,22 @@ import pl.jablonskanycz.bakery.database.models.PersonModel;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 @Getter
 @Setter
 public class ClientDTO {
+
     private Long clientId;
-    private PersonModel personModel;
-    private AddressModel addressModel;
+
+    @NonNull
+    private PersonModel person;
+
+    @NonNull
+    private AddressModel address;
 
     @Override
     public String toString() {
-        return clientId + " , " + personModel + " , " + addressModel;
+        return clientId + " , " + person + " , " + address;
     }
 }
