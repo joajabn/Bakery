@@ -6,7 +6,7 @@ address_id int, foreign key (address_id) references address(address_id) ON DELET
 Create table IF NOT EXISTS orders (order_id serial primary key, order_date date,
 client_id int, foreign key (client_id) references clients(client_id) ON DELETE CASCADE);
 Create type IF NOT EXISTS product_type as enum ('BUN', 'BREAD');
-Create table IF NOT EXISTS products (product_id serial primary key, name varchar(50), price decimal,
+Create table IF NOT EXISTS products (product_id integer auto_increment primary key, name varchar(50), price decimal,
 product_type product_type);
 create table IF NOT EXISTS order_details(order_id int, product_id int,
 foreign key (order_id) references orders(order_id) ON DELETE CASCADE,

@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 public class ProductEntity {
 
     @Id
