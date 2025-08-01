@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.jablonskanycz.bakery.database.domain.ProductType;
+import pl.jablonskanycz.bakery.database.domain.ProductTypeEntity;
 
 @Getter
 @NoArgsConstructor
@@ -14,7 +14,7 @@ public class ProductModel {
     private Long productId;
     private String productName;
     private Double price;
-    private ProductType productType;
+    private ProductTypeEntity productType;
 
     @Override
     public String toString() {

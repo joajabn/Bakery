@@ -26,8 +26,9 @@ public class ProductEntity {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "product_type")
-    private ProductType productType;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_type_id")
+    private ProductTypeEntity productType;
 
     @ManyToMany(mappedBy = "productsInThisOrder", fetch = FetchType.EAGER)
     private List<OrderEntity> orderWithProducts;

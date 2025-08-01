@@ -1,7 +1,5 @@
 package pl.jablonskanycz.bakery.database.services;
 
-import org.h2.tools.Server;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -11,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import pl.jablonskanycz.bakery.database.domain.ProductType;
+import pl.jablonskanycz.bakery.database.domain.ProductTypeEntity;
 import pl.jablonskanycz.bakery.database.exceptions.ProductNotFoundException;
 import pl.jablonskanycz.bakery.database.mapper.ProductMapper;
 import pl.jablonskanycz.bakery.database.models.ProductModel;
@@ -28,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class ProductServiceIntegrationTest {
+    public static final String BREAD = "BREAD";
+    public static final String BUN = "BUN";
+
     private ProductService productService;
     @Autowired
     private ProductRepository productRepository;
@@ -35,6 +36,12 @@ class ProductServiceIntegrationTest {
     private ProductMapper productMapper;
 
     private ProductModel sampleProduct;
+    private ProductTypeEntity productTypeBread = ProductTypeEntity.builder()
+        .productType(BREAD)
+        .build();
+    private ProductTypeEntity productTypeBun = ProductTypeEntity.builder()
+        .productType(BUN)
+        .build();
 
     @BeforeEach
     public void setUp() throws SQLException {
@@ -43,10 +50,10 @@ class ProductServiceIntegrationTest {
         sampleProduct = ProductModel.builder()
                 .productName("Test Bread")
                 .price(2.5)
-                .productType(ProductType.BREAD)
+                .productType(productTypeBread)
                 .build();
-
-        Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start();
+// for connecting with test H2 database
+//        Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start();
     }
 
     @Test
@@ -69,7 +76,7 @@ class ProductServiceIntegrationTest {
         assertEquals(countBefore + 1, countAfter);
         assertNotNull(addedProduct.getProductId());
         assertEquals("Test Bread", addedProduct.getProductName());
-        assertEquals(ProductType.BREAD, addedProduct.getProductType());
+        assertEquals(BREAD, addedProduct.getProductType().getProductType());
     }
 
     @Test
@@ -106,7 +113,7 @@ class ProductServiceIntegrationTest {
         ProductModel updateInfo = ProductModel.builder()
                 .productName("Updated Bread")
                 .price(3.0)
-                .productType(ProductType.BREAD)
+                .productType(productTypeBread)
                 .build();
 
         //when
@@ -115,7 +122,7 @@ class ProductServiceIntegrationTest {
         //then
         assertEquals("Updated Bread", updatedProduct.getProductName());
         assertEquals(3.0, updatedProduct.getPrice());
-        assertEquals(ProductType.BREAD, updatedProduct.getProductType());
+        assertEquals(BREAD, updatedProduct.getProductType().getProductType());
 
         // Verify persistence
         ProductModel foundProduct = productService.findById(addedProduct.getProductId());
@@ -144,13 +151,13 @@ class ProductServiceIntegrationTest {
         ProductModel bun1 = ProductModel.builder()
                 .productName("Bun 1")
                 .price(1.0)
-                .productType(ProductType.BUN)
+                .productType(productTypeBun)
                 .build();
 
         ProductModel bread = ProductModel.builder()
                 .productName("Bread 1")
                 .price(2.0)
-                .productType(ProductType.BREAD)
+                .productType(productTypeBread)
                 .build();
 
 
@@ -162,7 +169,7 @@ class ProductServiceIntegrationTest {
 
         //then
         assertFalse(buns.isEmpty());
-        assertTrue(buns.stream().allMatch(p -> p.getProductType() == ProductType.BUN));
+        assertTrue(buns.stream().allMatch(p -> BUN.equalsIgnoreCase(p.getProductType().getProductType())));
         assertTrue(buns.stream().anyMatch(p -> "Bun 1".equals(p.getProductName())));
     }
 
@@ -172,13 +179,13 @@ class ProductServiceIntegrationTest {
         ProductModel bun = ProductModel.builder()
                 .productName("Bun 2")
                 .price(1.5)
-                .productType(ProductType.BUN)
+                .productType(productTypeBun)
                 .build();
 
         ProductModel bread1 = ProductModel.builder()
                 .productName("Bread 2")
                 .price(2.5)
-                .productType(ProductType.BREAD)
+                .productType(productTypeBread)
                 .build();
 
         productService.addProduct(bun);
@@ -189,7 +196,7 @@ class ProductServiceIntegrationTest {
 
         //then
         assertFalse(breads.isEmpty());
-        assertTrue(breads.stream().allMatch(p -> p.getProductType() == ProductType.BREAD));
+        assertTrue(breads.stream().allMatch(p -> BREAD.equalsIgnoreCase(p.getProductType().getProductType())));
 
     }
 }

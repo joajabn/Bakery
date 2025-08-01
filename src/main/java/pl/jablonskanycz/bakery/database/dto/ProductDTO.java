@@ -1,7 +1,7 @@
 package pl.jablonskanycz.bakery.database.dto;
 
 import lombok.*;
-import pl.jablonskanycz.bakery.database.domain.ProductType;
+import pl.jablonskanycz.bakery.database.domain.ProductTypeEntity;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,7 +12,7 @@ public class ProductDTO {
     private Long productId;
     private String productName;
     private Double price;
-    private ProductType productType;
+    private ProductTypeEntity productType;
 
     @Override
     public String toString() {

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.jablonskanycz.bakery.database.domain.ProductEntity;
-import pl.jablonskanycz.bakery.database.domain.ProductType;
 import pl.jablonskanycz.bakery.database.exceptions.ProductNotFoundException;
 import pl.jablonskanycz.bakery.database.mapper.ProductMapper;
 import pl.jablonskanycz.bakery.database.models.ProductModel;
@@ -21,6 +20,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductService {
 
+    public static final String BUN = "BUN";
+    public static final String BREAD = "BREAD";
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -38,7 +39,7 @@ public class ProductService {
     public List<ProductModel> getAllBuns() {
         log.info("Getting all buns");
         List<ProductModel> allBuns = productRepository.findAll().stream()
-                .filter(product -> product.getProductType().equals(ProductType.BUN))
+                .filter(product -> product.getProductType().getProductType().equals(BUN))
                 .map(productMapper::toModel)
                 .collect(Collectors.toList());
         log.info("Getting all buns completed");
@@ -47,7 +48,7 @@ public class ProductService {
     public List<ProductModel> getAllBreads() {
         log.info("Getting all breads");
         List<ProductModel> allBreads = productRepository.findAll().stream()
-                .filter(product -> product.getProductType().equals(ProductType.BREAD))
+                .filter(product -> product.getProductType().getProductType().equals(BREAD))
                 .map(productMapper::toModel)
                 .collect(Collectors.toList());
         log.info("Getting all breads completed");

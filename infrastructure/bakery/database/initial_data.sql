@@ -5,9 +5,11 @@ person_id int, foreign key (person_id) references person(person_id) ON DELETE CA
 address_id int, foreign key (address_id) references address(address_id) ON DELETE CASCADE);
 Create table orders (order_id serial primary key, order_date date,
 client_id int, foreign key (client_id) references clients(client_id) ON DELETE CASCADE);
-Create type product_type as enum ('BUN', 'BREAD');
+Create table product_type (product_type_id serial primary key, product_type_col varchar(50));
 Create table products (product_id serial primary key, name varchar(50), price decimal,
-product_type product_type);
+product_type_id int,
+foreign key (product_type_id) references product_type(product_type_id) ON DELETE CASCADE
+);
 create table order_details(order_id int, product_id int,
 foreign key (order_id) references orders(order_id) ON DELETE CASCADE,
 foreign key (product_id) references products(product_id) ON DELETE CASCADE,
@@ -39,25 +41,28 @@ Insert into employees (person_id, job_startdate) values
 (6, '2023-05-11'),
 (7, '2022-03-11'),
 (8, '2023-08-01');
-Insert into products (name, price, product_type) values
-('Asparagus bun', 13.6, 'BUN'),
-('Tomato bun', 8.7, 'BUN'),
-('Spinach bun', 10.3, 'BUN'),
-('Rhubarb bun', 12.4, 'BUN'),
-('Strawberry bun', 10.8, 'BUN'),
-('Raspberry bun', 13.3, 'BUN'),
-('Wheat bread', 12, 'BREAD'),
-('Rye bread', 15, 'BREAD'),
-('Spelt bread', 15, 'BREAD'),
-('Wheat wholegrain bread', 17, 'BREAD'),
-('Rye wholegrain bread', 18, 'BREAD'),
-('Spelt wholegrain bread', 19, 'BREAD'),
-('Black seed bread', 15.5,	'BREAD'),
-('Sesame bread', 16.7, 'BREAD'),
-('Linseed bread', 16.2, 'BREAD'),
-('Black seed bun', 4.4, 'BUN'),
-('Sesame bun', 3.7, 'BUN'),
-('Linseed bun', 3.9, 'BUN');
+Insert into product_type (product_type_col) values
+('BUN'),
+('BREAD');
+Insert into products (name, price, product_type_id) values
+('Asparagus bun', 13.6, 1),
+('Tomato bun', 8.7, 1),
+('Spinach bun', 10.3, 1),
+('Rhubarb bun', 12.4, 1),
+('Strawberry bun', 10.8, 1),
+('Raspberry bun', 13.3, 1),
+('Wheat bread', 12, 2),
+('Rye bread', 15, 2),
+('Spelt bread', 15, 2),
+('Wheat wholegrain bread', 17, 2),
+('Rye wholegrain bread', 18, 2),
+('Spelt wholegrain bread', 19, 2),
+('Black seed bread', 15.5,	2),
+('Sesame bread', 16.7, 2),
+('Linseed bread', 16.2, 2),
+('Black seed bun', 4.4, 1),
+('Sesame bun', 3.7, 1),
+('Linseed bun', 3.9, 1);
 Insert into orders (client_id, order_date) values
 (1, '2023-08-01'),
 (2, '2024-06-01'),
@@ -83,6 +88,7 @@ CREATE SEQUENCE IF NOT EXISTS client_seq;
 CREATE SEQUENCE IF NOT EXISTS employees_seq;
 CREATE SEQUENCE IF NOT EXISTS orders_seq;
 CREATE SEQUENCE IF NOT EXISTS products_seq;
+CREATE SEQUENCE IF NOT EXISTS product_type_seq;
 
 SELECT setval('person_seq', (SELECT MAX(p.person_id) FROM person p));
 SELECT setval('address_seq', (SELECT MAX(a.address_id) FROM address a));
@@ -90,3 +96,4 @@ SELECT setval('client_seq', (SELECT MAX(c.client_id) FROM clients c));
 SELECT setval('employees_seq', (SELECT MAX(e.employee_id) FROM employees e));
 SELECT setval('orders_seq', (SELECT MAX(o.order_id) FROM orders o));
 SELECT setval('products_seq', (SELECT MAX(p.product_id) FROM products p));
+SELECT setval('product_type_seq', (SELECT MAX(p.product_type_id) FROM product_type p));
