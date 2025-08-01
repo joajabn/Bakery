@@ -34,6 +34,6 @@ public class ProductTypeEntity {
     @Column(name = "product_type_col")
     private String productType;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "productTypeId")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "productId")
     private List<ProductEntity> products;
 }
