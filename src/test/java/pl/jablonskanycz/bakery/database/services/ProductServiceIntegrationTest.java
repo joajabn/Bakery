@@ -9,10 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import pl.jablonskanycz.bakery.database.domain.ProductTypeEntity;
 import pl.jablonskanycz.bakery.database.exceptions.ProductNotFoundException;
 import pl.jablonskanycz.bakery.database.mapper.ProductMapper;
 import pl.jablonskanycz.bakery.database.models.ProductModel;
+import pl.jablonskanycz.bakery.database.models.ProductTypeModel;
 import pl.jablonskanycz.bakery.database.repositories.ProductRepository;
 
 import java.sql.SQLException;
@@ -36,10 +36,10 @@ class ProductServiceIntegrationTest {
     private ProductMapper productMapper;
 
     private ProductModel sampleProduct;
-    private ProductTypeEntity productTypeBread = ProductTypeEntity.builder()
+    private ProductTypeModel productTypeBread = ProductTypeModel.builder()
         .productType(BREAD)
         .build();
-    private ProductTypeEntity productTypeBun = ProductTypeEntity.builder()
+    private ProductTypeModel productTypeBun = ProductTypeModel.builder()
         .productType(BUN)
         .build();
 
@@ -50,7 +50,7 @@ class ProductServiceIntegrationTest {
         sampleProduct = ProductModel.builder()
                 .productName("Test Bread")
                 .price(2.5)
-                .productType(productTypeBread)
+                .productTypeModel(productTypeBread)
                 .build();
 // for connecting with test H2 database
 //        Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start();
@@ -76,7 +76,7 @@ class ProductServiceIntegrationTest {
         assertEquals(countBefore + 1, countAfter);
         assertNotNull(addedProduct.getProductId());
         assertEquals("Test Bread", addedProduct.getProductName());
-        assertEquals(BREAD, addedProduct.getProductType().getProductType());
+        assertEquals(BREAD, addedProduct.getProductTypeModel().getProductType());
     }
 
     @Test
@@ -113,7 +113,7 @@ class ProductServiceIntegrationTest {
         ProductModel updateInfo = ProductModel.builder()
                 .productName("Updated Bread")
                 .price(3.0)
-                .productType(productTypeBread)
+                .productTypeModel(productTypeBread)
                 .build();
 
         //when
@@ -122,7 +122,7 @@ class ProductServiceIntegrationTest {
         //then
         assertEquals("Updated Bread", updatedProduct.getProductName());
         assertEquals(3.0, updatedProduct.getPrice());
-        assertEquals(BREAD, updatedProduct.getProductType().getProductType());
+        assertEquals(BREAD, updatedProduct.getProductTypeModel().getProductType());
 
         // Verify persistence
         ProductModel foundProduct = productService.findById(addedProduct.getProductId());
@@ -151,13 +151,13 @@ class ProductServiceIntegrationTest {
         ProductModel bun1 = ProductModel.builder()
                 .productName("Bun 1")
                 .price(1.0)
-                .productType(productTypeBun)
+                .productTypeModel(productTypeBun)
                 .build();
 
         ProductModel bread = ProductModel.builder()
                 .productName("Bread 1")
                 .price(2.0)
-                .productType(productTypeBread)
+                .productTypeModel(productTypeBread)
                 .build();
 
 
@@ -169,7 +169,7 @@ class ProductServiceIntegrationTest {
 
         //then
         assertFalse(buns.isEmpty());
-        assertTrue(buns.stream().allMatch(p -> BUN.equalsIgnoreCase(p.getProductType().getProductType())));
+        assertTrue(buns.stream().allMatch(p -> BUN.equalsIgnoreCase(p.getProductTypeModel().getProductType())));
         assertTrue(buns.stream().anyMatch(p -> "Bun 1".equals(p.getProductName())));
     }
 
@@ -179,13 +179,13 @@ class ProductServiceIntegrationTest {
         ProductModel bun = ProductModel.builder()
                 .productName("Bun 2")
                 .price(1.5)
-                .productType(productTypeBun)
+                .productTypeModel(productTypeBun)
                 .build();
 
         ProductModel bread1 = ProductModel.builder()
                 .productName("Bread 2")
                 .price(2.5)
-                .productType(productTypeBread)
+                .productTypeModel(productTypeBread)
                 .build();
 
         productService.addProduct(bun);
@@ -196,7 +196,7 @@ class ProductServiceIntegrationTest {
 
         //then
         assertFalse(breads.isEmpty());
-        assertTrue(breads.stream().allMatch(p -> BREAD.equalsIgnoreCase(p.getProductType().getProductType())));
+        assertTrue(breads.stream().allMatch(p -> BREAD.equalsIgnoreCase(p.getProductTypeModel().getProductType())));
 
     }
 }

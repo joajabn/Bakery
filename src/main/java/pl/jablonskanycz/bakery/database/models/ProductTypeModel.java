@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductModel {
-    private Long productId;
-    private String productName;
-    private Double price;
-    private ProductTypeModel productTypeModel;
+public class ProductTypeModel {
+
+    private Long productTypeId;
+    private String productType;
 
     @Override
     public String toString() {
-        return productId + " , " + productName + " , " + price + " , " + productTypeModel;
+        return productTypeId + ", " + productType;
     }
 }

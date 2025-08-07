@@ -77,7 +77,7 @@ public class ProductService {
         ProductEntity productToUpdate = returnProductIfExists(productToUpdateId);
         productToUpdate.setProductName(productModelToUpdate.getProductName());
         productToUpdate.setPrice(productModelToUpdate.getPrice());
-        productToUpdate.setProductType(productModelToUpdate.getProductType());
+        productToUpdate.setProductType(productMapper.toEntity(productModelToUpdate).getProductType());
         log.info("Updating product completed");
         return productMapper.toModel(productToUpdate);
     }
