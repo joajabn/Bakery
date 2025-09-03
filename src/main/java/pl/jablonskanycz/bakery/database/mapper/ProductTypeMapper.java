@@ -10,19 +10,62 @@ import pl.jablonskanycz.bakery.database.dto.ProductTypeDTO;
 import pl.jablonskanycz.bakery.database.models.ProductTypeModel;
 
 @Component
-@Mapper(componentModel = "spring")
-public interface ProductTypeMapper {
+//@Mapper(componentModel = "spring")
+public class ProductTypeMapper {
 
-    @Mappings(
-            {
-                    @Mapping(source = "productTypeId", target = "productTypeId"),
-                    @Mapping(source = "productType", target = "productType")
-            })
-    ProductTypeEntity toEntity(ProductTypeModel productTypeModel);
+//    ProductTypeEntity toEntity(ProductTypeModel productTypeModel);
+//
+//    ProductTypeModel toModel(ProductTypeEntity productTypeEntity);
+//
+//    ProductTypeModel toModel(ProductTypeDTO productTypeDTO);
+//
+//    ProductTypeDTO toDTO(ProductTypeModel productTypeModel);
 
-    ProductTypeModel toModel(ProductTypeEntity productTypeEntity);
+    public ProductTypeEntity toEntity(ProductTypeModel productTypeModel) {
+        if (productTypeModel == null) {
+            return null;
+        }
 
-    ProductTypeModel toModel(ProductTypeDTO productTypeDTO);
+        ProductTypeEntity productTypeEntity = new ProductTypeEntity();
+        return productTypeEntity.toBuilder()
+                .productTypeId(productTypeModel.getProductTypeId())
+                .productType(productTypeModel.getProductType())
+                .build();
+    }
 
-    ProductTypeDTO toDTO(ProductTypeModel productTypeModel);
+    public ProductTypeModel toModel(ProductTypeEntity productTypeEntity){
+        if (productTypeEntity == null) {
+            return null;
+        }
+
+        ProductTypeModel productTypeModel = new ProductTypeModel();
+        return productTypeModel.builder()
+                .productTypeId(productTypeModel.getProductTypeId())
+                .productType(productTypeModel.getProductType())
+                .build();
+    }
+
+    public ProductTypeModel toModel(ProductTypeDTO productTypeDTO){
+        if(productTypeDTO == null){
+            return null;
+        }
+
+        ProductTypeModel productTypeModel = new ProductTypeModel();
+        return productTypeModel.builder()
+                .productTypeId(productTypeDTO.getProductTypeId())
+                .productType(productTypeDTO.getProductType())
+                .build();
+    }
+
+    public ProductTypeDTO toDTO(ProductTypeModel productTypeModel){
+        if(productTypeModel == null){
+            return null;
+        }
+
+        ProductTypeDTO productTypeDTO = new ProductTypeDTO();
+        return productTypeDTO.builder()
+                .productTypeId(productTypeModel.getProductTypeId())
+                .productType(productTypeModel.getProductType())
+                .build();
+    }
 }
