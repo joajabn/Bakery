@@ -26,7 +26,7 @@ public class ProductEntity {
     @Column(name = "price")
     private Double price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "productTypeId", referencedColumnName = "product_type_id")
     private ProductTypeEntity productType;
 

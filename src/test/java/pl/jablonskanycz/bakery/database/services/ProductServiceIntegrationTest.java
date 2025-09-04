@@ -126,7 +126,7 @@ class ProductServiceIntegrationTest {
 
         // Verify persistence
         ProductModel foundProduct = productService.findById(addedProduct.getProductId());
-        assertEquals("Updated Bread", foundProduct.getProductName());
+        assertEquals("Updated Bread", updatedProduct.getProductName());
     }
 
     @Test
