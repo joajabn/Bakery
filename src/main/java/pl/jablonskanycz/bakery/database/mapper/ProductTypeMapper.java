@@ -40,8 +40,8 @@ public class ProductTypeMapper {
 
         ProductTypeModel productTypeModel = new ProductTypeModel();
         return productTypeModel.builder()
-                .productTypeId(productTypeModel.getProductTypeId())
-                .productType(productTypeModel.getProductType())
+                .productTypeId(productTypeEntity.getProductTypeId())
+                .productType(productTypeEntity.getProductType())
                 .build();
     }
 

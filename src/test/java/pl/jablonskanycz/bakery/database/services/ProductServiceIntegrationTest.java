@@ -37,11 +37,13 @@ class ProductServiceIntegrationTest {
 
     private ProductModel sampleProduct;
     private ProductTypeModel productTypeBread = ProductTypeModel.builder()
-        .productType(BREAD)
-        .build();
+//            .productTypeId(2L)
+            .productType(BREAD)
+            .build();
     private ProductTypeModel productTypeBun = ProductTypeModel.builder()
-        .productType(BUN)
-        .build();
+//            .productTypeId(1L)
+            .productType(BUN)
+            .build();
 
     @BeforeEach
     public void setUp() throws SQLException {
